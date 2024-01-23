@@ -5,12 +5,16 @@ import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist/Todolist";
 import {useAppDispatch, useAppSelector} from "../../app/store";
 import {
+    changeFilterAC,
     createTodolistTC,
     fetchTodolistsTC,
-    FilterValuesType, removeTodolistTC,
-    TodolistDomainType, updateTodolistTC
+    FilterValuesType,
+    removeTodolistTC,
+    TodolistDomainType,
+    updateTodolistTC
 } from "./todolists-reducer";
-import {TasksStateType} from "./tasks-reducer";
+import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from "./tasks-reducer";
+import {TaskStatuses} from "../../api/todolist-api";
 
 export const TodolistsList = () => {
 
@@ -19,19 +23,23 @@ export const TodolistsList = () => {
     const dispatch = useAppDispatch();
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
+        dispatch(removeTaskTC(todolistId, id))
     }, []);
 
     const addTask = useCallback(function (title: string, todolistId: string) {
+        dispatch(addTaskTC(todolistId, title))
     }, []);
 
     const changeStatus = useCallback(function (id: string, isDone: boolean, todolistId: string) {
+        dispatch(updateTaskTC(todolistId, id, {status: isDone ? TaskStatuses.Completed : TaskStatuses.New}))
     }, []);
 
     const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
+        dispatch(updateTaskTC(todolistId, id, {title: newTitle}))
     }, []);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
-
+        dispatch(changeFilterAC(todolistId, value))
     }, []);
 
     const removeTodolist = useCallback(function (id: string) {
