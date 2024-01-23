@@ -1,5 +1,6 @@
 import {todolistApi, TodolistType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
+import {setAppStatus} from "../../app/app-reducer";
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
@@ -59,34 +60,42 @@ export const changeFilterAC = (todolistId: string, filter: FilterValuesType) =>
 
 //thunks
 export const fetchTodolistsTC = () => async(dispatch: Dispatch) => {
+    dispatch(setAppStatus("loading"))
     const res = await todolistApi.getTodolist()
     try {
         dispatch(setTodolists(res.data))
+        dispatch(setAppStatus("succeeded"))
     } catch (e){
 
     }
 }
 
 export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatus("loading"))
     todolistApi.createTodolist(title)
         .then((res) => {
             dispatch(createTodolist(res.data.data.item))
+            dispatch(setAppStatus("succeeded"))
         })
 }
 
 export const removeTodolistTC = (todolistId: string) => async (dispatch: Dispatch) => {
+    dispatch(setAppStatus("loading"))
     const res = await todolistApi.deleteTodolist(todolistId)
     try {
         dispatch(removeTodolist(todolistId))
+        dispatch(setAppStatus("succeeded"))
     } catch (e){
 
     }
 }
 
 export const updateTodolistTC = (todolistId: string, title: string) => async(dispatch: Dispatch) => {
+    dispatch(setAppStatus("loading"))
     const res = await todolistApi.updateTodolist(todolistId, title)
     try {
         dispatch(updateTodolist(todolistId, title))
+        dispatch(setAppStatus("succeeded"))
     } catch (e){
 
     }

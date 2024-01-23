@@ -2,25 +2,30 @@ import {CreateTodolistType, FilterValuesType, RemoveTodolistType, SetTodolistsTy
 import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, todolistApi, UpdateTaskType} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
+import {setAppStatus} from "../../app/app-reducer";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
+
+//types
 
 type ActionsType = SetTodolistsType | RemoveTodolistType | CreateTodolistType | ReturnType<typeof setTasks>
     | ReturnType<typeof addTask> | ReturnType<typeof removeTask> | ReturnType<typeof updateTask>
 
 const initialState: TasksStateType = {}
 
-export type TaskDomainType = {
+export type domainTaskType = {
     title?: string
     description?: string
     completed?: boolean
-    status?: number
+    status?: TaskStatuses
     priority?: number
     startDate?: string
     deadline?: string
 }
+
+// reducer
 
 export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
@@ -57,39 +62,49 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
     }
 }
 
+//actions
+
 export const setTasks = (todolistId: string, tasks: TaskType[]) => ({type: "TASK/SET-TASK", todolistId, tasks}) as const
 export const addTask = (task: TaskType) => ({type: "TASK/ADD-TASK", task}) as const
 export const removeTask = (todolistId: string, taskId: string) => ({
     type: "TASK/REMOVE-TASK", todolistId, taskId}) as const
 export const updateTask = (task: TaskType) => ({type: "TASK/UPDATE-TASK", task}) as const
+
+//thunks
+
 export const fetchTaskTC = (todolistId: string) => async (dispatch: Dispatch) => {
+    dispatch(setAppStatus("loading"))
     const res = await todolistApi.getTasks(todolistId)
     try {
         dispatch(setTasks(todolistId, res.data.items))
+        dispatch(setAppStatus("succeeded"))
     } catch (e) {
 
     }
 }
 export const addTaskTC = (todolistId: string, title: string) => async (dispatch: Dispatch) => {
+    dispatch(setAppStatus("loading"))
     const res = await todolistApi.createTask(todolistId, title)
     try {
         dispatch(addTask(res.data.data.item))
+        dispatch(setAppStatus("succeeded"))
     } catch (e) {
 
     }
 }
-
 export const removeTaskTC = (todolistId: string, taskId: string) => async (dispatch: Dispatch) => {
+    dispatch(setAppStatus("loading"))
     await todolistApi.deleteTask(todolistId, taskId)
     try {
         dispatch(removeTask(todolistId, taskId))
+        dispatch(setAppStatus("succeeded"))
     } catch (e) {
 
     }
 }
-
 export const updateTaskTC = (todolistId: string, taskId: string, model: domainTaskType) =>
     async(dispatch: Dispatch, getState: () => AppRootStateType) => {
+    dispatch(setAppStatus("loading"))
     const state = getState()
     const task = state.tasks[todolistId].find(t => t.id === taskId)
     if (task){
@@ -106,19 +121,11 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: domainTa
         const res = await todolistApi.updateTask(todolistId, taskId, modelApi)
         try {
             dispatch(updateTask(res.data.data.item))
+            dispatch(setAppStatus("succeeded"))
         } catch (e){
 
         }
     }
 }
 
-export type domainTaskType = {
-    title?: string
-    description?: string
-    completed?: boolean
-    status?: TaskStatuses
-    priority?: number
-    startDate?: string
-    deadline?: string
-}
 
