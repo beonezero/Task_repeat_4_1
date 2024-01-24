@@ -1,7 +1,6 @@
 import {todolistApi, TodolistType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
-import {RequestStatusType, setAppError, setAppStatus} from "../../app/app-reducer";
-import {handleError} from "../../utils/handle-error";
+import {RequestStatusType, setAppStatus} from "../../app/app-reducer";
 import {handleNetworkAppError, handleServerAppError} from "../../utils/error-utils";
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
@@ -75,9 +74,8 @@ export const fetchTodolistsTC = () => async (dispatch: Dispatch) => {
         const res = await todolistApi.getTodolist()
         dispatch(setTodolists(res.data))
         dispatch(setAppStatus("succeeded"))
-    } catch (e: any) {
-        dispatch(setAppError(e.message))
-        dispatch(setAppStatus("failed"))
+    } catch (e) {
+        handleNetworkAppError(e, dispatch)
     }
 }
 
@@ -100,26 +98,23 @@ export const removeTodolistTC = (todolistId: string) => async (dispatch: Dispatc
     dispatch(setAppStatus("loading"))
     dispatch(changeEntityStatus(todolistId, "loading"))
     try {
-        const res = await todolistApi.deleteTodolist(todolistId)
+        await todolistApi.deleteTodolist(todolistId)
         dispatch(removeTodolist(todolistId))
         dispatch(setAppStatus("succeeded"))
     } catch (e) {
         dispatch(changeEntityStatus(todolistId, "failed"))
-        dispatch(setAppStatus("failed"))
-        handleError(e, dispatch)
-    } finally {
-
+        handleNetworkAppError(e, dispatch)
     }
 }
 
 export const updateTodolistTC = (todolistId: string, title: string) => async (dispatch: Dispatch) => {
     dispatch(setAppStatus("loading"))
     try {
-        const res = await todolistApi.updateTodolist(todolistId, title)
+        await todolistApi.updateTodolist(todolistId, title)
         dispatch(updateTodolist(todolistId, title))
         dispatch(setAppStatus("succeeded"))
     } catch (e) {
-
+        handleNetworkAppError(e, dispatch)
     }
 }
 
