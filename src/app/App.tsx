@@ -11,10 +11,10 @@ import LinearProgress from "@mui/material/LinearProgress";
 import {TodolistsList} from "../features/TodolistList/TodolistsList";
 import {useAppSelector} from "./store";
 import {RequestStatusType} from "./app-reducer";
+import {GlobalError} from "./globalError/GlobalError";
 
 function App() {
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
-    console.log(status)
     return (
         <div className="App">
             <AppBar position="static">
@@ -30,6 +30,7 @@ function App() {
             </AppBar>
             {status === "loading" && <LinearProgress color="secondary" />}
             <Container fixed>
+                <GlobalError/>
                 <TodolistsList/>
             </Container>
         </div>

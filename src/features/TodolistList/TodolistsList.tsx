@@ -71,6 +71,7 @@ export const TodolistsList = () => {
                             <Paper style={{padding: '10px'}}>
                                 <Todolist
                                     id={tl.id}
+                                    entityStatus={tl.entityStatus}
                                     title={tl.title}
                                     tasks={allTodolistTasks}
                                     removeTask={removeTask}

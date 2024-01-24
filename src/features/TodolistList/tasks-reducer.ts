@@ -1,8 +1,15 @@
-import {CreateTodolistType, FilterValuesType, RemoveTodolistType, SetTodolistsType} from './todolists-reducer';
+import {
+    changeEntityStatus,
+    CreateTodolistType,
+    FilterValuesType,
+    RemoveTodolistType,
+    SetTodolistsType
+} from './todolists-reducer';
 import {Dispatch} from "redux";
 import {TaskStatuses, TaskType, todolistApi, UpdateTaskType} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
-import {setAppStatus} from "../../app/app-reducer";
+import {setAppError, setAppStatus} from "../../app/app-reducer";
+import {handleError} from "../../utils/handle-error";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -39,8 +46,10 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
         }
         case "TASK/UPDATE-TASK": {
-            return {...state, [action.task.todoListId]: state[action.task.todoListId]
-                    .map(t => t.id === action.task.id ? {...action.task} : t)}
+            return {
+                ...state, [action.task.todoListId]: state[action.task.todoListId]
+                    .map(t => t.id === action.task.id ? {...action.task} : t)
+            }
         }
         case "TODOLIST/SET-TODOLIST": {
             const copyState = {...state}
@@ -67,15 +76,16 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
 export const setTasks = (todolistId: string, tasks: TaskType[]) => ({type: "TASK/SET-TASK", todolistId, tasks}) as const
 export const addTask = (task: TaskType) => ({type: "TASK/ADD-TASK", task}) as const
 export const removeTask = (todolistId: string, taskId: string) => ({
-    type: "TASK/REMOVE-TASK", todolistId, taskId}) as const
+    type: "TASK/REMOVE-TASK", todolistId, taskId
+}) as const
 export const updateTask = (task: TaskType) => ({type: "TASK/UPDATE-TASK", task}) as const
 
 //thunks
 
 export const fetchTaskTC = (todolistId: string) => async (dispatch: Dispatch) => {
     dispatch(setAppStatus("loading"))
-    const res = await todolistApi.getTasks(todolistId)
     try {
+        const res = await todolistApi.getTasks(todolistId)
         dispatch(setTasks(todolistId, res.data.items))
         dispatch(setAppStatus("succeeded"))
     } catch (e) {
@@ -84,18 +94,33 @@ export const fetchTaskTC = (todolistId: string) => async (dispatch: Dispatch) =>
 }
 export const addTaskTC = (todolistId: string, title: string) => async (dispatch: Dispatch) => {
     dispatch(setAppStatus("loading"))
-    const res = await todolistApi.createTask(todolistId, title)
     try {
-        dispatch(addTask(res.data.data.item))
-        dispatch(setAppStatus("succeeded"))
-    } catch (e) {
-
+        const res = await todolistApi.createTask(todolistId, title)
+        if (res.data.resultCode === 0) {
+            dispatch(addTask(res.data.data.item))
+            dispatch(setAppStatus("succeeded"))
+        } else {
+            if (res.data.messages.length) {
+                dispatch(setAppError(res.data.messages[0]))
+            } else {
+                dispatch(setAppError("Some error"))
+            }
+            dispatch(changeEntityStatus(todolistId, "failed"))
+            dispatch(setAppStatus("failed"))
+        }
+        console.log("try")
+    } catch (e: any) {
+        dispatch(changeEntityStatus(todolistId, "failed"))
+        dispatch(setAppStatus("failed"))
+        dispatch(setAppError(e.message))
+        console.log("catch")
     }
 }
+
 export const removeTaskTC = (todolistId: string, taskId: string) => async (dispatch: Dispatch) => {
     dispatch(setAppStatus("loading"))
-    await todolistApi.deleteTask(todolistId, taskId)
     try {
+        await todolistApi.deleteTask(todolistId, taskId)
         dispatch(removeTask(todolistId, taskId))
         dispatch(setAppStatus("succeeded"))
     } catch (e) {
@@ -103,29 +128,28 @@ export const removeTaskTC = (todolistId: string, taskId: string) => async (dispa
     }
 }
 export const updateTaskTC = (todolistId: string, taskId: string, model: domainTaskType) =>
-    async(dispatch: Dispatch, getState: () => AppRootStateType) => {
-    dispatch(setAppStatus("loading"))
-    const state = getState()
-    const task = state.tasks[todolistId].find(t => t.id === taskId)
-    if (task){
-        const modelApi: UpdateTaskType = {
-            title: task.title,
-            description: task.description,
-            completed: task.completed,
-            status: task.status,
-            priority: task.priority,
-            startDate: task.startDate,
-            deadline: task.deadline,
-            ...model
-        }
-        const res = await todolistApi.updateTask(todolistId, taskId, modelApi)
+    async (dispatch: Dispatch, getState: () => AppRootStateType) => {
+        dispatch(setAppStatus("loading"))
         try {
-            dispatch(updateTask(res.data.data.item))
-            dispatch(setAppStatus("succeeded"))
-        } catch (e){
-
+            const state = getState()
+            const task = state.tasks[todolistId].find(t => t.id === taskId)
+            if (task) {
+                const modelApi: UpdateTaskType = {
+                    title: task.title,
+                    description: task.description,
+                    completed: task.completed,
+                    status: task.status,
+                    priority: task.priority,
+                    startDate: task.startDate,
+                    deadline: task.deadline,
+                    ...model
+                }
+                const res = await todolistApi.updateTask(todolistId, taskId, modelApi)
+                dispatch(updateTask(res.data.data.item))
+                dispatch(setAppStatus("succeeded"))
+            }
+        } catch (e) {
         }
     }
-}
 
 
