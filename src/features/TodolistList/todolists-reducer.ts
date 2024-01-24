@@ -1,7 +1,8 @@
 import {todolistApi, TodolistType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
-import {RequestStatusType, setAppStatus} from "../../app/app-reducer";
+import {RequestStatusType, setAppError, setAppStatus} from "../../app/app-reducer";
 import {handleError} from "../../utils/handle-error";
+import {handleNetworkAppError, handleServerAppError} from "../../utils/error-utils";
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
@@ -74,21 +75,24 @@ export const fetchTodolistsTC = () => async (dispatch: Dispatch) => {
         const res = await todolistApi.getTodolist()
         dispatch(setTodolists(res.data))
         dispatch(setAppStatus("succeeded"))
-    } catch (e) {
-
+    } catch (e: any) {
+        dispatch(setAppError(e.message))
+        dispatch(setAppStatus("failed"))
     }
 }
 
-export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
+export const createTodolistTC = (title: string) => async (dispatch: Dispatch) => {
     dispatch(setAppStatus("loading"))
     try {
-        todolistApi.createTodolist(title)
-            .then((res) => {
-                dispatch(createTodolist(res.data.data.item))
-                dispatch(setAppStatus("succeeded"))
-            })
+        const res = await todolistApi.createTodolist(title)
+                if (res.data.resultCode === 0) {
+                    dispatch(createTodolist(res.data.data.item))
+                    dispatch(setAppStatus("succeeded"))
+                } else {
+                    handleServerAppError<{item: TodolistType}>(res.data, dispatch)
+                }
     } catch (e) {
-
+        handleNetworkAppError(e, dispatch)
     }
 }
 
