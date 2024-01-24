@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react'
-import {AddItemForm} from '../../../AddItemForm'
-import {EditableSpan} from '../../../EditableSpan'
+import {AddItemForm} from '../../../components/AddItemForm/AddItemForm'
+import {EditableSpan} from '../../../components/EditableSpan/EditableSpan'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import {Delete} from '@mui/icons-material';
@@ -57,12 +57,12 @@ export const Todolist = React.memo(function (props: PropsType) {
 
     useEffect(() => {
         dispatch(fetchTaskTC(props.id))
-    },[])
+    }, [])
 
     return <div>
         <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}/>
             <IconButton onClick={removeTodolist} disabled={props.entityStatus === "loading"}>
-                <Delete />
+                <Delete/>
             </IconButton>
         </h3>
         <AddItemForm addItem={addTask} disabled={props.entityStatus === "loading"}/>

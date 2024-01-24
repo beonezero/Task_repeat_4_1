@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import Grid from "@mui/material/Grid";
-import {AddItemForm} from "../../AddItemForm";
+import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist/Todolist";
 import {useAppDispatch, useAppSelector} from "../../app/store";

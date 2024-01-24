@@ -103,7 +103,7 @@ export const addTaskTC = (todolistId: string, title: string) => async (dispatch:
             dispatch(setAppStatus("succeeded"))
             dispatch(changeEntityStatus(todolistId, "succeeded"))
         } else {
-            handleServerAppError<{item: TaskType}>(res.data, dispatch)
+            handleServerAppError<{ item: TaskType }>(res.data, dispatch)
             dispatch(changeEntityStatus(todolistId, "failed"))
         }
     } catch (e) {
@@ -143,11 +143,11 @@ export const updateTaskTC = (todolistId: string, taskId: string, model: domainTa
                     ...model
                 }
                 const res = await todolistApi.updateTask(todolistId, taskId, modelApi)
-                if (res.data.resultCode === 0){
+                if (res.data.resultCode === 0) {
                     dispatch(updateTask(res.data.data.item))
                     dispatch(setAppStatus("succeeded"))
                 } else {
-                   handleServerAppError<{item: TaskType}>(res.data, dispatch)
+                    handleServerAppError<{ item: TaskType }>(res.data, dispatch)
                 }
             }
         } catch (e) {
