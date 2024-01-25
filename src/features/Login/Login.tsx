@@ -8,13 +8,25 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
+import {useAppDispatch, useAppSelector} from "../../app/store";
+import {loginTC} from "../../auth/auth-reducer";
+import {useSelector} from "react-redux";
+import {Navigate} from "react-router-dom";
 
 type FormikErrorType = {
     email?: string
     password?: string
 }
 
+export type LoginDataType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
+
 export const Login = () => {
+    const dispatch = useAppDispatch()
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -37,10 +49,13 @@ export const Login = () => {
         },
         onSubmit: (values, submit) => {
             // submit.setSubmiting(true) - дизейблить кнопку ( надо сделать async , await + disabled на кнопку)
-            console.log(values)
+            dispatch(loginTC(values))
             //formik.resetForm() зачищение формы
         },
     });
+    if (isLoggedIn){
+       return <Navigate to={"/"}/>
+    }
     return <Grid container justifyContent={'center'}>
         <Grid item justifyContent={'center'}>
             <FormControl>
