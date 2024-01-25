@@ -12,6 +12,8 @@ import {TodolistsList} from "../features/TodolistList/TodolistsList";
 import {useAppSelector} from "./store";
 import {RequestStatusType} from "./app-reducer";
 import {GlobalError} from "./globalError/GlobalError";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {Login} from "../features/Login/Login";
 
 function App() {
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
@@ -29,9 +31,14 @@ function App() {
                 </Toolbar>
             </AppBar>
             {status === "loading" && <LinearProgress color="secondary" />}
+            <GlobalError/>
             <Container fixed>
-                <GlobalError/>
-                <TodolistsList/>
+                <Routes>
+                    <Route path={"/"} element={<TodolistsList/>}/>
+                    <Route path={"/login"} element={<Login/>}/>
+                    <Route path={"/404"} element={<h1>404: PAGE NOT FOUND :D</h1>}/>
+                    <Route path={"*"} element={<Navigate to={"/404"}/>}/>
+                </Routes>
             </Container>
         </div>
     );
