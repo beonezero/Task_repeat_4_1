@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,14 +9,35 @@ import Container from '@mui/material/Container';
 import Menu from '@mui/icons-material/Menu';
 import LinearProgress from "@mui/material/LinearProgress";
 import {TodolistsList} from "../features/TodolistList/TodolistsList";
-import {useAppSelector} from "./store";
+import {useAppDispatch, useAppSelector} from "./store";
 import {RequestStatusType} from "./app-reducer";
 import {GlobalError} from "./globalError/GlobalError";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
+import {logOutTC, meTC} from "../auth/auth-reducer";
+import {CircularProgress} from "@mui/material";
 
-function App() {
+export const  App = () => {
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
+    const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized)
+    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
+    const dispatch = useAppDispatch()
+    const handlerLogOut = () => {
+        dispatch(logOutTC())
+    }
+
+    useEffect(() => {
+        dispatch(meTC())
+    }, [])
+
+    {
+        if (!isInitialized) {
+            return <div>
+                <CircularProgress/>
+            </div>
+        }
+    }
+
     return (
         <div className="App">
             <AppBar position="static">
@@ -27,10 +48,10 @@ function App() {
                     <Typography variant="h6">
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button onClick={handlerLogOut} color="inherit">Log out</Button>}
                 </Toolbar>
             </AppBar>
-            {status === "loading" && <LinearProgress color="secondary" />}
+            {status === "loading" && <LinearProgress color="secondary"/>}
             <GlobalError/>
             <Container fixed>
                 <Routes>
@@ -43,5 +64,3 @@ function App() {
         </div>
     );
 }
-
-export default App;

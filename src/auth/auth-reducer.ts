@@ -1,7 +1,7 @@
 //types
 import {LoginDataType} from "../features/Login/Login";
 import {Dispatch} from "redux";
-import {setAppStatus} from "../app/app-reducer";
+import {setAppStatus, setIsInitialized} from "../app/app-reducer";
 import {authAPI} from "../api/todolist-api";
 import {handleNetworkAppError, handleServerAppError} from "../utils/error-utils";
 
@@ -27,6 +27,19 @@ export const authReducer = (state: InitialAuthStateType = initialState, action: 
 }
 export const setIsLoggedInStatus = (status: boolean) => ({type: "AUTH/SET-ISLOGGEDIN-STATUS", status}) as const
 
+export const logOutTC = () => async (dispatch: Dispatch) => {
+    setAppStatus("loading")
+    try {
+        const res = await authAPI.logOut()
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInStatus(false))
+            dispatch(setAppStatus("succeeded"))
+        } else handleServerAppError(res.data, dispatch)
+    } catch (e) {
+        handleNetworkAppError(e, dispatch)
+    }
+}
+
 export const loginTC = (data: LoginDataType) => async (dispatch: Dispatch) => {
     setAppStatus("loading")
     try {
@@ -38,5 +51,19 @@ export const loginTC = (data: LoginDataType) => async (dispatch: Dispatch) => {
     } catch (e) {
         handleNetworkAppError(e, dispatch)
     }
+}
 
+export const meTC = () => async (dispatch: Dispatch) => {
+    setAppStatus("loading")
+    try {
+        const res = await authAPI.me()
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInStatus(true))
+            dispatch(setAppStatus("succeeded"))
+        } else handleServerAppError(res.data, dispatch)
+    } catch (e) {
+        handleNetworkAppError(e, dispatch)
+    } finally {
+        dispatch(setIsInitialized(true))
+    }
 }

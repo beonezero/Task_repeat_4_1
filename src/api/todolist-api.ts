@@ -7,8 +7,14 @@ const instance = axios.create({
 })
 
 export const authAPI = {
+    me(){
+      return instance.get<ResponseType<UserType>>("auth/me")
+    },
     loginIn(data: LoginDataType) {
         return instance.post<null, AxiosResponse<ResponseType<{userId: number}>>, LoginDataType>("auth/login", data)
+    },
+    logOut(){
+        return instance.delete<ResponseType>("auth/login")
     }
 }
 
@@ -25,7 +31,7 @@ export const todolistApi = {
         return instance.delete<ResponseType>(`todo-lists/{${todolistId}}`)
     },
     updateTodolist(todolistId: string, title: string) {
-        return instance.put<null, ResponseType<ResponseType>, { title: string }>(`todo-lists/${todolistId}`, {title})
+        return instance.put<null, AxiosResponse<ResponseType<{item: TaskType}>>, { title: string }>(`todo-lists/${todolistId}`, {title})
     },
     getTasks(todolistId: string) {
         return instance.get<null, AxiosResponse<ResponseTaskType>>(`todo-lists/${todolistId}/tasks`)
@@ -46,6 +52,12 @@ export const todolistApi = {
 }
 
 // types
+
+export type UserType = {
+    id: number
+    email: string
+    login: string
+}
 
 export type ResponseType<T = {}> = {
     resultCode: number
