@@ -1,5 +1,5 @@
 import {
-    changeEntityStatus, ChangeEntityStatusType,
+    changeEntityStatus, ChangeEntityStatusType, ClearStateType,
     CreateTodolistType,
     RemoveTodolistType,
     SetTodolistsType
@@ -18,6 +18,7 @@ export type TasksStateType = {
 
 type ActionsType = SetTodolistsType | RemoveTodolistType | CreateTodolistType | ReturnType<typeof setTasks>
     | ReturnType<typeof addTask> | ReturnType<typeof removeTask> | ReturnType<typeof updateTask>
+    | ClearStateType
 
 export type domainTaskType = {
     title?: string
@@ -66,6 +67,9 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         }
         case "TODOLIST/CREATE-TODOLIST": {
             return {...state, [action.todolist.id]: []}
+        }
+        case "TODOLIST/CLEAR-STATE":{
+            return {}
         }
         default:
             return state;

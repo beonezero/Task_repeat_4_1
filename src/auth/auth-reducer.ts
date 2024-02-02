@@ -4,6 +4,7 @@ import {Dispatch} from "redux";
 import {setAppStatus, setIsInitialized} from "../app/app-reducer";
 import {authAPI} from "../api/todolist-api";
 import {handleNetworkAppError, handleServerAppError} from "../utils/error-utils";
+import {clearState} from "../features/TodolistList/todolists-reducer";
 
 type InitialAuthStateType = {
     isLoggedIn: boolean
@@ -34,6 +35,7 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInStatus(false))
             dispatch(setAppStatus("succeeded"))
+            dispatch(clearState())
         } else handleServerAppError(res.data, dispatch)
     } catch (e) {
         handleNetworkAppError(e, dispatch)

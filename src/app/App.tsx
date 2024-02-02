@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Menu from '@mui/icons-material/Menu';
 import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import {TodolistsList} from "../features/TodolistList/TodolistsList";
 import {useAppDispatch, useAppSelector} from "./store";
 import {RequestStatusType} from "./app-reducer";
@@ -15,7 +16,6 @@ import {GlobalError} from "./globalError/GlobalError";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
 import {logOutTC, meTC} from "../auth/auth-reducer";
-import {CircularProgress} from "@mui/material";
 
 export const App = () => {
     const status = useAppSelector<RequestStatusType>(state => state.app.status)

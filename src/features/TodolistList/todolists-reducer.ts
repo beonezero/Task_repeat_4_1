@@ -2,6 +2,7 @@ import {todolistApi, TodolistType} from "../../api/todolist-api";
 import {Dispatch} from "redux";
 import {RequestStatusType, SetAppErrorType, setAppStatus, SetAppStatusType} from "../../app/app-reducer";
 import {handleNetworkAppError, handleServerAppError} from "../../utils/error-utils";
+import {fetchTaskTC} from "./tasks-reducer";
 
 // types
 
@@ -17,13 +18,15 @@ export type UpdateTodolistType = ReturnType<typeof updateTodolist>
 
 export type ChangeEntityStatusType = ReturnType<typeof changeEntityStatus>
 
+export type ClearStateType = ReturnType<typeof clearState>
+
 export type TodolistDomainType = TodolistType & {
     filter: FilterValuesType
     entityStatus: RequestStatusType
 }
 
 type ActionsType = CreateTodolistType | SetTodolistsType | RemoveTodolistType | UpdateTodolistType
-    | ReturnType<typeof changeFilterAC> | ChangeEntityStatusType
+    | ReturnType<typeof changeFilterAC> | ChangeEntityStatusType | ClearStateType
 
 type TodolistThunkDispatchType = Dispatch<SetAppStatusType | SetAppErrorType | ActionsType>
 
@@ -50,6 +53,9 @@ export const todolistsReducer = (state: TodolistDomainType[] = initialState, act
         case "TODOLIST/CHANGE-ENTITY-STATUS": {
             return state.map(td => td.id === action.todolistId ? {...td, entityStatus: action.status} : td)
         }
+        case "TODOLIST/CLEAR-STATE":{
+            return []
+        }
         default:
             return state;
     }
@@ -74,28 +80,52 @@ export const changeFilterAC = (todolistId: string, filter: FilterValuesType) =>
 export const changeEntityStatus = (todolistId: string, status: RequestStatusType) =>
     ({type: "TODOLIST/CHANGE-ENTITY-STATUS", todolistId, status}) as const
 
+export const clearState = () =>
+    ({type: "TODOLIST/CLEAR-STATE"}) as const
+
 //thunks
-export const fetchTodolistsTC = () => async (dispatch: TodolistThunkDispatchType) => {
+export const fetchTodolistsTC = () => (dispatch: any) => {
     dispatch(setAppStatus("loading"))
-    try {
-        const res = await todolistApi.getTodolist()
-        dispatch(setTodolists(res.data))
-        dispatch(setAppStatus("succeeded"))
-    } catch (e) {
-        handleNetworkAppError(e, dispatch)
-    }
+    todolistApi.getTodolist()
+        .then((res) => {
+            dispatch(setTodolists(res.data))
+            dispatch(setAppStatus("succeeded"))
+            return res.data
+        })
+        .then((res) => {
+            res.forEach(tl => {
+                dispatch(fetchTaskTC(tl.id))
+            })
+        })
+        .catch((e) => {
+            handleNetworkAppError(e, dispatch)
+        })
 }
+
+// export const fetchTodolistsTC = () => async (dispatch: TodolistThunkDispatchType) => {
+//     dispatch(setAppStatus("loading"))
+//     try {
+//         const res = await todolistApi.getTodolist()
+//         dispatch(setTodolists(res.data))
+//         dispatch(setAppStatus("succeeded"))
+//         return new Promise ((resolve) => {resolve(res.data)})
+//     } catch (e) {
+//         handleNetworkAppError(e, dispatch)
+//         return new Promise ((reject) => {reject(e)})
+//     }
+// }
+
 
 export const createTodolistTC = (title: string) => async (dispatch: TodolistThunkDispatchType) => {
     dispatch(setAppStatus("loading"))
     try {
         const res = await todolistApi.createTodolist(title)
-                if (res.data.resultCode === 0) {
-                    dispatch(createTodolist(res.data.data.item))
-                    dispatch(setAppStatus("succeeded"))
-                } else {
-                    handleServerAppError<{item: TodolistType}>(res.data, dispatch)
-                }
+        if (res.data.resultCode === 0) {
+            dispatch(createTodolist(res.data.data.item))
+            dispatch(setAppStatus("succeeded"))
+        } else {
+            handleServerAppError<{ item: TodolistType }>(res.data, dispatch)
+        }
     } catch (e) {
         handleNetworkAppError(e, dispatch)
     }
