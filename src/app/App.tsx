@@ -16,11 +16,12 @@ import { GlobalError } from "./globalError/GlobalError"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "features/Login/Login"
 import { logOutTC, meTC } from "auth/auth-reducer"
+import { authSelector } from "auth/use-selector"
 
 export const App = () => {
   const status = useAppSelector<RequestStatusType>((state) => state.app.status)
   const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized)
-  const isLoggedIn = useAppSelector<boolean>((state) => state.auth.isLoggedIn)
+  const isLoggedIn = authSelector.useIsLoggedIn()
   const dispatch = useAppDispatch()
   const handlerLogOut = () => {
     dispatch(logOutTC())

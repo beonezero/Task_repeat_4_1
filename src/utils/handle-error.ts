@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import { Dispatch } from "redux"
-import { appActions } from "../app/app-reducer"
+import { appActions } from "app/app-reducer"
 
 export const handleError = (e: unknown, dispatch: Dispatch) => {
   let errorMessage: string
