@@ -8,9 +8,10 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useFormik } from "formik"
-import { useAppDispatch, useAppSelector } from "../../app/store"
-import { loginTC } from "../../auth/auth-reducer"
+import { useAppDispatch } from "app/store"
+import { loginTC } from "auth/auth-reducer"
 import { Navigate } from "react-router-dom"
+import { authSelectors } from "auth/auth.selectors"
 
 type FormikErrorType = {
   email?: string
@@ -25,7 +26,8 @@ export type LoginDataType = {
 
 export const Login = () => {
   const dispatch = useAppDispatch()
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+  const isLoggedIn = authSelectors.useIsLoggedIn()
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -46,7 +48,7 @@ export const Login = () => {
       }
       return errors
     },
-    onSubmit: (values, submit) => {
+    onSubmit: (values) => {
       // submit.setSubmiting(true) - дизейблить кнопку ( надо сделать async , await + disabled на кнопку)
       dispatch(loginTC(values))
       //formik.resetForm() зачищение формы

@@ -10,18 +10,18 @@ import Menu from "@mui/icons-material/Menu"
 import LinearProgress from "@mui/material/LinearProgress"
 import CircularProgress from "@mui/material/CircularProgress"
 import { TodolistsList } from "features/TodolistList/TodolistsList"
-import { useAppDispatch, useAppSelector } from "./store"
-import { RequestStatusType } from "./app-reducer"
-import { GlobalError } from "./globalError/GlobalError"
+import { useAppDispatch } from "./store"
+import { GlobalError } from "globalError/GlobalError"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "features/Login/Login"
 import { logOutTC, meTC } from "auth/auth-reducer"
-import { authSelector } from "auth/use-selector"
+import { authSelectors } from "auth/auth.selectors"
+import { appSelectors } from "app/app.selectors"
 
 export const App = () => {
-  const status = useAppSelector<RequestStatusType>((state) => state.app.status)
-  const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized)
-  const isLoggedIn = authSelector.useIsLoggedIn()
+  const status = appSelectors.useStatus()
+  const isInitialized = appSelectors.useIsInitialized()
+  const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
   const handlerLogOut = () => {
     dispatch(logOutTC())

@@ -16,11 +16,12 @@ import {
 import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from "./tasks-reducer"
 import { TaskStatuses } from "api/todolist-api"
 import { Navigate } from "react-router-dom"
+import { authSelectors } from "auth/auth.selectors"
 
 export const TodolistsList = () => {
   const todolists = useAppSelector<Array<TodolistDomainType>>((state) => state.todolists)
   const tasks = useAppSelector<TasksStateType>((state) => state.tasks)
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+  const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
 
   const removeTask = useCallback(function (id: string, todolistId: string) {
