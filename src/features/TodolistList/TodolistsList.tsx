@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid"
 import { AddItemForm } from "components/AddItemForm/AddItemForm"
 import Paper from "@mui/material/Paper"
 import { Todolist } from "./Todolist/Todolist"
-import { useAppDispatch, useAppSelector } from "app/store"
+import { useAppDispatch } from "app/store"
 import {
   createTodolistTC,
   fetchTodolistsTC,
@@ -12,15 +12,16 @@ import {
   todolistsActions,
   updateTodolistTC,
 } from "./todolists-reducer"
-import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from "./tasks-reducer"
+import { addTaskTC, removeTaskTC, updateTaskTC } from "./tasks-reducer"
 import { TaskStatuses } from "api/todolist-api"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "auth/auth.selectors"
 import { todolistsSelectors } from "features/TodolistList/todolists.selectors"
+import { tasksSelectors } from "features/TodolistList/Todolist/tasks.selectors"
 
 export const TodolistsList = () => {
   const todolists = todolistsSelectors.useTodolists()
-  const tasks = useAppSelector<TasksStateType>((state) => state.tasks)
+  const tasks = tasksSelectors.useTasks()
   const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
 
