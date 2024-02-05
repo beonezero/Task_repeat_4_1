@@ -57,7 +57,13 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)/"
+    ]
+  },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.23.3",
     "@storybook/addon-actions": "6.5.13",
     "@storybook/addon-essentials": "6.5.13",
     "@storybook/addon-links": "6.5.13",
@@ -66,6 +72,8 @@
     "@storybook/node-logger": "6.5.13",
     "@storybook/preset-create-react-app": "4.1.2",
     "@storybook/react": "6.5.13",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
     "webpack": "5"
   }
 }
