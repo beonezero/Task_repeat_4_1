@@ -11,8 +11,8 @@ import {
   removeTodolistTC,
   todolistsActions,
   updateTodolistTC,
-} from "./todolists-reducer"
-import { addTaskTC, removeTaskTC, updateTaskTC } from "./tasks-reducer"
+} from "features/TodolistList/todolistsSlice"
+import { addTaskTC, removeTaskTC, updateTaskTC } from "features/TodolistList/tasksSlice"
 import { TaskStatuses } from "api/todolist-api"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "auth/auth.selectors"

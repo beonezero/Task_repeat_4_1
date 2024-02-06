@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton"
 import Button from "@mui/material/Button"
 import { Delete } from "@mui/icons-material"
 import { Task } from "./Task/Task"
-import { FilterValuesType } from "../todolists-reducer"
+import { FilterValuesType } from "features/TodolistList/todolistsSlice"
 import { TaskStatuses, TaskType } from "api/todolist-api"
 import { RequestStatusType } from "app/app-reducer"
 

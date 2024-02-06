@@ -1,9 +1,9 @@
 import { TaskStatuses, TaskType, todolistApi, UpdateTaskType } from "api/todolist-api"
-import { AppRootStateType, AppThunk } from "app/store"
+import { AppRootStateType, AppThunk, AppThunkDispatch } from "app/store"
 import { handleNetworkAppError, handleServerAppError } from "utils/error-utils"
 import { appActions } from "app/app-reducer"
-import { todolistsActions } from "features/TodolistList/todolists-reducer"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { todolistsActions } from "features/TodolistList/todolistsSlice"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 //types
 
@@ -21,17 +21,39 @@ export type domainTaskType = {
   deadline?: string
 }
 
-// reducer
+//thunks
 
-const initialState: TasksStateType = {}
+const fetchTask = createAsyncThunk<
+  { todolistId: string; tasks: TaskType[] },
+  string,
+  {
+    state: AppRootStateType
+    dispatch: AppThunkDispatch
+    rejectValue: null
+  }
+>("tasks/fetchTasks", async (todolistId: string, thunkAPI) => {
+  const { dispatch, rejectWithValue } = thunkAPI
+  dispatch(appActions.setAppStatus({ status: "loading" }))
+  try {
+    const res = await todolistApi.getTasks(todolistId)
+    dispatch(appActions.setAppStatus({ status: "succeeded" }))
+    return { todolistId: todolistId, tasks: res.data.items }
+  } catch (e) {
+    handleNetworkAppError(e, dispatch)
+    return rejectWithValue(null)
+  }
+})
+
+export const tasksThunks = {
+  fetchTaskTC: fetchTask,
+}
+
+// reducer
 
 const slice = createSlice({
   name: "tasks",
-  initialState: initialState,
+  initialState: {} as TasksStateType,
   reducers: {
-    setTasks: (state, action: PayloadAction<{ todolistId: string; tasks: TaskType[] }>) => {
-      state[action.payload.todolistId] = action.payload.tasks
-    },
     addTask: (state, action: PayloadAction<{ task: TaskType }>) => {
       state[action.payload.task.todoListId].unshift(action.payload.task)
     },
@@ -50,6 +72,9 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchTaskTC.fulfilled, (state, action) => {
+        state[action.payload.todolistId] = action.payload.tasks
+      })
       .addCase(todolistsActions.setTodolists, (state, action) => {
         action.payload.todolists.forEach((td) => {
           state[td.id] = []
@@ -67,22 +92,12 @@ const slice = createSlice({
   },
 })
 
-export const tasksReducer = slice.reducer
+export const tasksSlice = slice.reducer
 export const tasksActions = slice.actions
+
+export const { fetchTaskTC } = tasksThunks
 //thunks
 
-export const fetchTaskTC =
-  (todolistId: string): AppThunk =>
-  async (dispatch) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }))
-    try {
-      const res = await todolistApi.getTasks(todolistId)
-      dispatch(tasksActions.setTasks({ todolistId: todolistId, tasks: res.data.items }))
-      dispatch(appActions.setAppStatus({ status: "succeeded" }))
-    } catch (e) {
-      handleNetworkAppError(e, dispatch)
-    }
-  }
 export const addTaskTC =
   (todolistId: string, title: string): AppThunk =>
   async (dispatch) => {

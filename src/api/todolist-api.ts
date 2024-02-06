@@ -85,6 +85,7 @@ export type ResponseType<T = {}> = {
 type ResponseTaskType = {
   items: TaskType[]
   totalCount: number
+  fieldsErrors: { field: string; error: string }[]
   error: string
 }
 

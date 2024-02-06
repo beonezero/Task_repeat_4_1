@@ -5,7 +5,7 @@ import { authAPI } from "api/todolist-api"
 import { handleNetworkAppError, handleServerAppError } from "utils/error-utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appActions } from "app/app-reducer"
-import { todolistsActions } from "features/TodolistList/todolists-reducer"
+import { todolistsActions } from "features/TodolistList/todolistsSlice"
 
 const initialState = {
   isLoggedIn: false as boolean,
