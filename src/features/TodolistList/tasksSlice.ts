@@ -1,9 +1,10 @@
 import { TaskStatuses, TaskType, todolistApi, UpdateTaskType } from "api/todolist-api"
-import { AppRootStateType, AppThunk, AppThunkDispatch } from "app/store"
+import { AppRootStateType, AppThunk } from "app/store"
 import { handleNetworkAppError, handleServerAppError } from "utils/error-utils"
 import { appActions } from "app/app-reducer"
 import { todolistsActions } from "features/TodolistList/todolistsSlice"
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAppAsyncThunk } from "utils/createAppAsyncThunk"
 
 //types
 
@@ -23,14 +24,12 @@ export type domainTaskType = {
 
 //thunks
 
-const fetchTask = createAsyncThunk<
-  { todolistId: string; tasks: TaskType[] },
-  string,
+const fetchTask = createAppAsyncThunk<
   {
-    state: AppRootStateType
-    dispatch: AppThunkDispatch
-    rejectValue: null
-  }
+    todolistId: string
+    tasks: TaskType[]
+  },
+  string
 >("tasks/fetchTasks", async (todolistId: string, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
   dispatch(appActions.setAppStatus({ status: "loading" }))
