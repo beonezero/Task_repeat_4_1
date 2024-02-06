@@ -12,7 +12,7 @@ import {
   todolistsActions,
   updateTodolistTC,
 } from "features/TodolistList/todolistsSlice"
-import { addTaskTC, removeTaskTC, updateTaskTC } from "features/TodolistList/tasksSlice"
+import { removeTaskTC, tasksThunks, updateTaskTC } from "features/TodolistList/tasksSlice"
 import { TaskStatuses } from "api/todolist-api"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "auth/auth.selectors"
@@ -30,7 +30,7 @@ export const TodolistsList = () => {
   }, [])
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    dispatch(addTaskTC(todolistId, title))
+    dispatch(tasksThunks.addTask({ todolistId: todolistId, title: title }))
   }, [])
 
   const changeStatus = useCallback(function (id: string, isDone: boolean, todolistId: string) {

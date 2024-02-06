@@ -2,7 +2,7 @@
 import { LoginDataType } from "features/Login/Login"
 import { Dispatch } from "redux"
 import { authAPI } from "api/todolist-api"
-import { handleNetworkAppError, handleServerAppError } from "utils/error-utils"
+import { handleServerNetworkError, handleServerAppError } from "utils/error-utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appActions } from "app/app-reducer"
 import { todolistsActions } from "features/TodolistList/todolistsSlice"
@@ -33,7 +33,7 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
       dispatch(todolistsActions.clearState())
     } else handleServerAppError(res.data, dispatch)
   } catch (e) {
-    handleNetworkAppError(e, dispatch)
+    handleServerNetworkError(e, dispatch)
   }
 }
 
@@ -46,7 +46,7 @@ export const loginTC = (data: LoginDataType) => async (dispatch: Dispatch) => {
       dispatch(appActions.setAppStatus({ status: "succeeded" }))
     } else handleServerAppError(res.data, dispatch)
   } catch (e) {
-    handleNetworkAppError(e, dispatch)
+    handleServerNetworkError(e, dispatch)
   }
 }
 
@@ -59,7 +59,7 @@ export const meTC = () => async (dispatch: Dispatch) => {
       dispatch(appActions.setAppStatus({ status: "succeeded" }))
     } else handleServerAppError(res.data, dispatch)
   } catch (e) {
-    handleNetworkAppError(e, dispatch)
+    handleServerNetworkError(e, dispatch)
   } finally {
     dispatch(appActions.setIsInitialized({ isInitialized: true }))
   }
