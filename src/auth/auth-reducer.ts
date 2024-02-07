@@ -2,7 +2,7 @@
 import { LoginDataType } from "features/Login/Login"
 import { Dispatch } from "redux"
 import { authAPI } from "api/todolist-api"
-import { handleServerNetworkError, handleServerAppError } from "utils/error-utils"
+import { handleServerNetworkError, handleServerAppError } from "utils/handleServerNetworkError"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appActions } from "app/app-reducer"
 import { todolistsActions } from "features/TodolistList/todolistsSlice"

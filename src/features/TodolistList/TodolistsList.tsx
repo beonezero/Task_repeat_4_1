@@ -12,7 +12,7 @@ import {
   todolistsActions,
   updateTodolistTC,
 } from "features/TodolistList/todolistsSlice"
-import { removeTaskTC, tasksThunks, updateTaskTC } from "features/TodolistList/tasksSlice"
+import { removeTaskTC, tasksThunks } from "features/TodolistList/tasksSlice"
 import { TaskStatuses } from "api/todolist-api"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "auth/auth.selectors"
@@ -34,11 +34,17 @@ export const TodolistsList = () => {
   }, [])
 
   const changeStatus = useCallback(function (id: string, isDone: boolean, todolistId: string) {
-    dispatch(updateTaskTC(todolistId, id, { status: isDone ? TaskStatuses.Completed : TaskStatuses.New }))
+    dispatch(
+      tasksThunks.updateTask({
+        todolistId: todolistId,
+        taskId: id,
+        model: { status: isDone ? TaskStatuses.Completed : TaskStatuses.New },
+      })
+    )
   }, [])
 
   const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-    dispatch(updateTaskTC(todolistId, id, { title: newTitle }))
+    dispatch(tasksThunks.updateTask({ todolistId: todolistId, taskId: id, model: { title: newTitle } }))
   }, [])
 
   const changeFilter = useCallback(function (filter: FilterValuesType, todolistId: string) {

@@ -127,21 +127,26 @@ test("correct task should be added to correct array", () => {
   expect(endState["todolistId2"][0].status).toBe(TaskStatuses.New)
 })
 test("status of specified task should be changed", () => {
-  const action = tasksActions.updateTask({
-    task: {
-      todoListId: "todolistId2",
-      title: "juce",
-      status: TaskStatuses.New,
-      addedDate: "",
-      deadline: "",
-      description: "",
-      order: 0,
-      priority: TaskPriorities.Low,
-      startDate: "",
-      id: "2",
-      completed: false,
+  const task = {
+    todoListId: "todolistId2",
+    title: "juce",
+    status: TaskStatuses.New,
+    addedDate: "",
+    deadline: "",
+    description: "",
+    order: 0,
+    priority: TaskPriorities.Low,
+    startDate: "",
+    id: "2",
+    completed: false,
+  }
+  const action = tasksThunks.updateTask.fulfilled(
+    {
+      task,
     },
-  })
+    "requestId",
+    { todolistId: task.todoListId, taskId: task.id, model: task }
+  )
 
   const endState = tasksSlice(startState, action)
 
@@ -149,26 +154,29 @@ test("status of specified task should be changed", () => {
   expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New)
 })
 test("title of specified task should be changed", () => {
-  const action = tasksActions.updateTask({
-    task: {
-      todoListId: "todolistId2",
-      title: "yogurt",
-      status: TaskStatuses.New,
-      addedDate: "",
-      deadline: "",
-      description: "",
-      order: 0,
-      priority: TaskPriorities.Low,
-      startDate: "",
-      id: "2",
-      completed: false,
-    },
+  const task = {
+    todoListId: "todolistId2",
+    title: "jucek",
+    status: TaskStatuses.New,
+    addedDate: "",
+    deadline: "",
+    description: "",
+    order: 0,
+    priority: TaskPriorities.Low,
+    startDate: "",
+    id: "2",
+    completed: false,
+  }
+  const action = tasksThunks.updateTask.fulfilled({ task }, "requestId", {
+    todolistId: task.todoListId,
+    taskId: task.id,
+    model: task,
   })
 
   const endState = tasksSlice(startState, action)
 
   expect(endState["todolistId1"][1].title).toBe("JS")
-  expect(endState["todolistId2"][1].title).toBe("yogurt")
+  expect(endState["todolistId2"][1].title).toBe("jucek")
   expect(endState["todolistId2"][0].title).toBe("bread")
 })
 test("new array should be added when new todolist is added", () => {
