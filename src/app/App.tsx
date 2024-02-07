@@ -10,13 +10,13 @@ import Menu from "@mui/icons-material/Menu"
 import LinearProgress from "@mui/material/LinearProgress"
 import CircularProgress from "@mui/material/CircularProgress"
 import { TodolistsList } from "features/TodolistList/TodolistsList"
-import { useAppDispatch } from "./store"
-import { GlobalError } from "globalError/GlobalError"
+import { GlobalError } from "common/components/globalError/GlobalError"
 import { Navigate, Route, Routes } from "react-router-dom"
-import { Login } from "features/Login/Login"
-import { logOutTC, meTC } from "auth/auth-reducer"
-import { authSelectors } from "auth/auth.selectors"
+import { Login } from "features/auth/Login/Login"
+import { logOutTC, meTC } from "features/auth/auth-reducer"
+import { authSelectors } from "features/auth/auth.selectors"
 import { appSelectors } from "app/app.selectors"
+import { useAppDispatch } from "common/hooks/useAppDispatch"
 
 export const App = () => {
   const status = appSelectors.useStatus()

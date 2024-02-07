@@ -1,6 +1,6 @@
 import { tasksActions, tasksSlice, TasksStateType, tasksThunks } from "features/TodolistList/tasksSlice"
-import { TaskPriorities, TaskStatuses } from "api/todolist-api"
 import { todolistsActions } from "features/TodolistList/todolistsSlice"
+import { TaskPriorities, TaskStatuses } from "common/enum/enum"
 
 let startState: TasksStateType = {}
 beforeEach(() => {

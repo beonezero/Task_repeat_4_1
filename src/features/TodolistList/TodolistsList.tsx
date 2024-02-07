@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect } from "react"
 import Grid from "@mui/material/Grid"
-import { AddItemForm } from "components/AddItemForm/AddItemForm"
+import { AddItemForm } from "common/components/AddItemForm/AddItemForm"
 import Paper from "@mui/material/Paper"
 import { Todolist } from "./Todolist/Todolist"
-import { useAppDispatch } from "app/store"
 import {
   createTodolistTC,
   fetchTodolistsTC,
@@ -13,11 +12,12 @@ import {
   updateTodolistTC,
 } from "features/TodolistList/todolistsSlice"
 import { removeTaskTC, tasksThunks } from "features/TodolistList/tasksSlice"
-import { TaskStatuses } from "api/todolist-api"
 import { Navigate } from "react-router-dom"
-import { authSelectors } from "auth/auth.selectors"
+import { authSelectors } from "features/auth/auth.selectors"
 import { todolistsSelectors } from "features/TodolistList/todolists.selectors"
 import { tasksSelectors } from "features/TodolistList/Todolist/tasks.selectors"
+import { useAppDispatch } from "common/hooks/useAppDispatch"
+import { TaskStatuses } from "common/enum/enum"
 
 export const TodolistsList = () => {
   const todolists = todolistsSelectors.useTodolists()

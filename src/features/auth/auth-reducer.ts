@@ -1,11 +1,12 @@
 //types
-import { LoginDataType } from "features/Login/Login"
+import { LoginDataType } from "features/auth/Login/Login"
 import { Dispatch } from "redux"
-import { authAPI } from "api/todolist-api"
-import { handleServerNetworkError, handleServerAppError } from "utils/handleServerNetworkError"
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appActions } from "app/app-reducer"
 import { todolistsActions } from "features/TodolistList/todolistsSlice"
+import { authAPI } from "features/auth/authApi"
+import { handleServerAppError } from "common/utils"
 
 const initialState = {
   isLoggedIn: false as boolean,
