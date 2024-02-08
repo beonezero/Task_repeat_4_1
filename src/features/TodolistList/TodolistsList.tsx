@@ -4,17 +4,16 @@ import { AddItemForm } from "common/components/AddItemForm/AddItemForm"
 import Paper from "@mui/material/Paper"
 import { Todolist } from "./Todolist/Todolist"
 import {
-  createTodolistTC,
-  fetchTodolistsTC,
   FilterValuesType,
   removeTodolistTC,
   todolistsActions,
+  todolistsThunks,
   updateTodolistTC,
-} from "features/TodolistList/todolistsSlice"
-import { removeTaskTC, tasksThunks } from "features/TodolistList/tasksSlice"
+} from "features/TodolistList/todolists-reducer"
+import { tasksThunks } from "features/TodolistList/tasks-reducer"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/auth.selectors"
-import { todolistsSelectors } from "features/TodolistList/todolists.selectors"
+import { todolistsSelectors } from "features/TodolistList/todolists-selectors"
 import { tasksSelectors } from "features/TodolistList/Todolist/tasks.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { TaskStatuses } from "common/enum/enum"
@@ -25,8 +24,8 @@ export const TodolistsList = () => {
   const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
 
-  const removeTask = useCallback(function (id: string, todolistId: string) {
-    dispatch(removeTaskTC(todolistId, id))
+  const removeTask = useCallback(function (taskId: string, todolistId: string) {
+    dispatch(tasksThunks.removeTask({ todolistId: todolistId, taskId: taskId }))
   }, [])
 
   const addTask = useCallback(function (title: string, todolistId: string) {
@@ -61,7 +60,7 @@ export const TodolistsList = () => {
 
   const addTodolist = useCallback(
     (title: string) => {
-      dispatch(createTodolistTC(title))
+      dispatch(todolistsThunks.addTodolist(title))
     },
     [dispatch]
   )
@@ -70,7 +69,11 @@ export const TodolistsList = () => {
     if (!isLoggedIn) {
       return
     }
-    dispatch(fetchTodolistsTC())
+    dispatch(todolistsThunks.fetchTodolists()).then((res) => {
+      res.payload?.todolists.forEach((tl) => {
+        dispatch(tasksThunks.fetchTasks(tl.id))
+      })
+    })
   }, [dispatch])
   if (!isLoggedIn) {
     return <Navigate to={"/login"} />

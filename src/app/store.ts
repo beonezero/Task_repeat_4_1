@@ -1,5 +1,5 @@
-import { tasksSlice } from "features/TodolistList/tasksSlice"
-import { todolistsSlice } from "features/TodolistList/todolistsSlice"
+import { tasksReducer } from "features/TodolistList/tasks-reducer"
+import { todolistsReducer } from "features/TodolistList/todolists-reducer"
 import { AnyAction, combineReducers } from "redux"
 import { ThunkAction, ThunkDispatch } from "redux-thunk"
 import { TypedUseSelectorHook, useSelector } from "react-redux"
@@ -11,8 +11,8 @@ import { configureStore, UnknownAction } from "@reduxjs/toolkit"
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
   app: appReducer,
-  tasks: tasksSlice,
-  todolists: todolistsSlice,
+  tasks: tasksReducer,
+  todolists: todolistsReducer,
   auth: authReducer,
 })
 // непосредственно создаём store

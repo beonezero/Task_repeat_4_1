@@ -4,7 +4,7 @@ import { Dispatch } from "redux"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appActions } from "app/app-reducer"
-import { todolistsActions } from "features/TodolistList/todolistsSlice"
+import { todolistsActions } from "features/TodolistList/todolists-reducer"
 import { authAPI } from "features/auth/authApi"
 import { handleServerAppError } from "common/utils"
 
