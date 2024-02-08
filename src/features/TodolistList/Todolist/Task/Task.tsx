@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton"
 import Checkbox from "@mui/material/Checkbox"
 import { RequestStatusType } from "app/app-reducer"
 import { TaskStatuses } from "common/enum/enum"
-import { TaskType } from "features/TodolistList/todolistsApi"
+import { TaskType } from "features/TodolistList/Todolist/tasksApi"
 
 type TaskPropsType = {
   task: TaskType

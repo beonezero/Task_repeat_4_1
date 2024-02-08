@@ -7,13 +7,13 @@ import { Delete } from "@mui/icons-material"
 import { Task } from "./Task/Task"
 import { FilterValuesType } from "features/TodolistList/todolists-reducer"
 import { RequestStatusType } from "app/app-reducer"
-import { TaskType } from "features/TodolistList/todolistsApi"
 import { TaskStatuses } from "common/enum/enum"
+import { TaskType } from "features/TodolistList/Todolist/tasksApi"
 
 type PropsType = {
   id: string
   title: string
-  tasks: Array<TaskType>
+  tasks: TaskType[]
   changeFilter: (value: FilterValuesType, todolistId: string) => void
   addTask: (title: string, todolistId: string) => void
   changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void

@@ -1,5 +1,5 @@
 import { tasksReducer, TasksStateType, tasksThunks } from "features/TodolistList/tasks-reducer"
-import { todolistsActions, todolistsThunks } from "features/TodolistList/todolists-reducer"
+import { todolistsThunks } from "features/TodolistList/todolists-reducer"
 import { TaskPriorities, TaskStatuses } from "common/enum/enum"
 
 let startState: TasksStateType = {}
@@ -209,7 +209,7 @@ test("new array should be added when new todolist is added", () => {
   expect(endState[newKey]).toEqual([])
 })
 test("propertry with todolistId should be deleted", () => {
-  const action = todolistsActions.removeTodolist({ todolistId: "todolistId2" })
+  const action = todolistsThunks.removeTodolist.fulfilled({ todolistId: "todolistId2" }, "requestId", "todolistId2")
 
   const endState = tasksReducer(startState, action)
 

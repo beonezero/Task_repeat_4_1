@@ -3,13 +3,7 @@ import Grid from "@mui/material/Grid"
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm"
 import Paper from "@mui/material/Paper"
 import { Todolist } from "./Todolist/Todolist"
-import {
-  FilterValuesType,
-  removeTodolistTC,
-  todolistsActions,
-  todolistsThunks,
-  updateTodolistTC,
-} from "features/TodolistList/todolists-reducer"
+import { FilterValuesType, todolistsActions, todolistsThunks } from "features/TodolistList/todolists-reducer"
 import { tasksThunks } from "features/TodolistList/tasks-reducer"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/auth.selectors"
@@ -50,12 +44,12 @@ export const TodolistsList = () => {
     dispatch(todolistsActions.changeFilter({ todolistId: todolistId, filter: filter }))
   }, [])
 
-  const removeTodolist = useCallback(function (id: string) {
-    dispatch(removeTodolistTC(id))
+  const removeTodolist = useCallback(function (todolistId: string) {
+    dispatch(todolistsThunks.removeTodolist(todolistId))
   }, [])
 
-  const changeTodolistTitle = useCallback(function (id: string, title: string) {
-    dispatch(updateTodolistTC(id, title))
+  const changeTodolistTitle = useCallback(function (todolistId: string, title: string) {
+    dispatch(todolistsThunks.updateTodolist({ todolistId, title }))
   }, [])
 
   const addTodolist = useCallback(
