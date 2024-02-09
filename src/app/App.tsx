@@ -13,10 +13,10 @@ import { TodolistsList } from "features/TodolistList/TodolistsList"
 import { GlobalError } from "common/components/globalError/GlobalError"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "features/auth/Login/Login"
-import { logOut, me } from "features/auth/auth-reducer"
 import { authSelectors } from "features/auth/auth.selectors"
 import { appSelectors } from "app/app.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
+import { authThunks } from "features/auth/auth-reducer"
 
 export const App = () => {
   const status = appSelectors.useStatus()
@@ -24,11 +24,11 @@ export const App = () => {
   const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
   const handlerLogOut = () => {
-    dispatch(logOut())
+    dispatch(authThunks.logOut())
   }
 
   useEffect(() => {
-    dispatch(me())
+    dispatch(authThunks.me())
   }, [])
 
   {

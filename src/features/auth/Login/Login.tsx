@@ -8,10 +8,10 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useFormik } from "formik"
-import { login } from "features/auth/auth-reducer"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/auth.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
+import { authThunks } from "features/auth/auth-reducer"
 
 type FormikErrorType = {
   email?: string
@@ -50,7 +50,7 @@ export const Login = () => {
     },
     onSubmit: (values) => {
       // submit.setSubmiting(true) - дизейблить кнопку ( надо сделать async , await + disabled на кнопку)
-      dispatch(login(values))
+      dispatch(authThunks.login(values))
       //formik.resetForm() зачищение формы
     },
   })

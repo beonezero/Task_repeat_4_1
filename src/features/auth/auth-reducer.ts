@@ -25,7 +25,7 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginDataType>("auth/
   }
 })
 
-const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, void>("auth/logout", async (_, thunkAPI) => {
+const logOut = createAppAsyncThunk<{ isLoggedIn: boolean }, void>("auth/logout", async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
   try {
     appActions.setAppStatus({ status: "loading" })
@@ -72,7 +72,7 @@ const slice = createSlice({
       .addCase(me.fulfilled, (state, action) => {
         state.isLoggedIn = action.payload.isLoggedIn
       })
-      .addCase(logout.fulfilled, (state, action) => {
+      .addCase(logOut.fulfilled, (state, action) => {
         state.isLoggedIn = action.payload.isLoggedIn
       })
       .addCase(login.fulfilled, (state, action) => {
@@ -82,4 +82,4 @@ const slice = createSlice({
 })
 
 export const authReducer = slice.reducer
-export const authThunks = { login, logout, me }
+export const authThunks = { login, logOut, me }
