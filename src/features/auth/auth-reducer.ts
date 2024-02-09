@@ -8,13 +8,9 @@ import { todolistsActions } from "features/TodolistList/todolists-reducer"
 import { authAPI } from "features/auth/authApi"
 import { handleServerAppError } from "common/utils"
 
-const initialState = {
-  isLoggedIn: false as boolean,
-}
-
 const slice = createSlice({
   name: "auth",
-  initialState: initialState,
+  initialState: { isLoggedIn: false as boolean },
   reducers: {
     setIsLoggedInStatus: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
       state.isLoggedIn = action.payload.isLoggedIn
@@ -24,7 +20,8 @@ const slice = createSlice({
 
 export const authReducer = slice.reducer
 export const authActions = slice.actions
-export const logOutTC = () => async (dispatch: Dispatch) => {
+export const authThunks = {}
+export const logOut = () => async (dispatch: Dispatch) => {
   appActions.setAppStatus({ status: "loading" })
   try {
     const res = await authAPI.logOut()
@@ -38,7 +35,7 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
   }
 }
 
-export const loginTC = (data: LoginDataType) => async (dispatch: Dispatch) => {
+export const login = (data: LoginDataType) => async (dispatch: Dispatch) => {
   appActions.setAppStatus({ status: "loading" })
   try {
     const res = await authAPI.loginIn(data)
@@ -51,7 +48,7 @@ export const loginTC = (data: LoginDataType) => async (dispatch: Dispatch) => {
   }
 }
 
-export const meTC = () => async (dispatch: Dispatch) => {
+export const me = () => async (dispatch: Dispatch) => {
   appActions.setAppStatus({ status: "loading" })
   try {
     const res = await authAPI.me()
