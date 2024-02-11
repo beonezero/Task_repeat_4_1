@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios"
-import { ResponseType } from "common/types/common.types"
+import { BaseResponseType } from "common/types"
 import { instance } from "common/api"
 
 export const todolistsApi = {
@@ -9,17 +9,17 @@ export const todolistsApi = {
   createTodolist(title: string) {
     return instance.post<
       null,
-      AxiosResponse<ResponseType<{ item: TodolistType }>>,
+      AxiosResponse<BaseResponseType<{ item: TodolistType }>>,
       {
         title: string
       }
     >("todo-lists", { title })
   },
   deleteTodolist(todolistId: string) {
-    return instance.delete<ResponseType>(`todo-lists/{${todolistId}}`)
+    return instance.delete<BaseResponseType>(`todo-lists/{${todolistId}}`)
   },
   updateTodolist(todolistId: string, title: string) {
-    return instance.put<null, AxiosResponse<ResponseType>, { title: string }>(`todo-lists/${todolistId}`, { title })
+    return instance.put<null, AxiosResponse<BaseResponseType>, { title: string }>(`todo-lists/${todolistId}`, { title })
   },
 }
 

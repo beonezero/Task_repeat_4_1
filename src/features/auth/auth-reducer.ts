@@ -1,4 +1,3 @@
-//types
 import { LoginDataType } from "features/auth/Login/Login"
 import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
 import { createSlice } from "@reduxjs/toolkit"
@@ -10,14 +9,15 @@ import { createAppAsyncThunk, handleServerAppError } from "common/utils"
 const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginDataType>("auth/login", async (data, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
   try {
-    appActions.setAppStatus({ status: "loading" })
+    dispatch(appActions.setAppStatus({ status: "loading" }))
     const res = await authAPI.loginIn(data)
     if (res.data.resultCode === 0) {
       dispatch(appActions.setAppStatus({ status: "succeeded" }))
       return { isLoggedIn: true }
     } else {
-      handleServerAppError(res.data, dispatch)
-      return rejectWithValue(null)
+      const isShowAppError = !res.data.fieldsErrors.length
+      handleServerAppError(res.data, dispatch, isShowAppError)
+      return rejectWithValue(res.data)
     }
   } catch (e) {
     handleServerNetworkError(e, dispatch)
@@ -28,7 +28,7 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginDataType>("auth/
 const logOut = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/logout", async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
   try {
-    appActions.setAppStatus({ status: "loading" })
+    dispatch(appActions.setAppStatus({ status: "loading" }))
     const res = await authAPI.logOut()
     if (res.data.resultCode === 0) {
       dispatch(appActions.setAppStatus({ status: "succeeded" }))

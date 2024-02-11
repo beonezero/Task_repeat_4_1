@@ -1,6 +1,6 @@
 import { instance } from "common/api"
 import { AxiosResponse } from "axios"
-import { ResponseType } from "common/types"
+import { BaseResponseType } from "common/types"
 import { TaskPriorities, TaskStatuses } from "common/enum/enum"
 
 export const tasksApi = {
@@ -10,20 +10,20 @@ export const tasksApi = {
   createTask(todolistId: string, title: string) {
     return instance.post<
       null,
-      AxiosResponse<ResponseType<{ item: TaskType }>>,
+      AxiosResponse<BaseResponseType<{ item: TaskType }>>,
       {
         title: string
       }
     >(`todo-lists/${todolistId}/tasks`, { title })
   },
   deleteTask(todolistId: string, taskId: string) {
-    return instance.delete<null, AxiosResponse<ResponseType>>(`todo-lists/${todolistId}/tasks/${taskId}`)
+    return instance.delete<null, AxiosResponse<BaseResponseType>>(`todo-lists/${todolistId}/tasks/${taskId}`)
   },
   updateTask(todolistId: string, taskId: string, model: UpdateTaskType) {
     return instance.put<
       null,
       AxiosResponse<
-        ResponseType<{
+        BaseResponseType<{
           item: TaskType
         }>
       >,

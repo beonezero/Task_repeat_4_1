@@ -63,11 +63,13 @@ export const TodolistsList = () => {
     if (!isLoggedIn) {
       return
     }
-    dispatch(todolistsThunks.fetchTodolists()).then((res) => {
-      res.payload?.todolists.forEach((tl) => {
-        dispatch(tasksThunks.fetchTasks(tl.id))
+    dispatch(todolistsThunks.fetchTodolists())
+      .unwrap()
+      .then((res) => {
+        res.todolists.forEach((tl) => {
+          dispatch(tasksThunks.fetchTasks(tl.id))
+        })
       })
-    })
   }, [dispatch])
   if (!isLoggedIn) {
     return <Navigate to={"/login"} />
