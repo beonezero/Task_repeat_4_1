@@ -25,7 +25,7 @@ const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginDataType>("auth/
   }
 })
 
-const logOut = createAppAsyncThunk<{ isLoggedIn: boolean }, void>("auth/logout", async (_, thunkAPI) => {
+const logOut = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/logout", async (_arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
   try {
     appActions.setAppStatus({ status: "loading" })
@@ -44,7 +44,7 @@ const logOut = createAppAsyncThunk<{ isLoggedIn: boolean }, void>("auth/logout",
   }
 })
 
-const me = createAppAsyncThunk<{ isLoggedIn: boolean }, void>("auth/me", async (_, thunkAPI) => {
+const me = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/me", async (_arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
   try {
     const res = await authAPI.me()
