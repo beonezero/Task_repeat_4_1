@@ -1,7 +1,7 @@
 import { LoginDataType } from "features/auth/Login/Login"
 import { AxiosResponse } from "axios"
 import { instance } from "common/api/baseApi"
-import { ResponseType } from "common/types/types"
+import { ResponseType } from "common/types/common.types"
 
 export const authAPI = {
   me() {

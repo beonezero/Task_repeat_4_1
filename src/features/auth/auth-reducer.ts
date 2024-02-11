@@ -52,7 +52,6 @@ const me = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/me", as
       dispatch(appActions.setAppStatus({ status: "succeeded" }))
       return { isLoggedIn: true }
     } else {
-      handleServerAppError(res.data, dispatch)
       return rejectWithValue(null)
     }
   } catch (e) {
