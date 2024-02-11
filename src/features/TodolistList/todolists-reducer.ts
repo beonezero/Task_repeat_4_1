@@ -20,7 +20,7 @@ const fetchTodolists = createAppAsyncThunk<
   {
     todolists: TodolistType[]
   },
-  void
+  undefined
 >("todolists/fetchTodolists", async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
   try {
