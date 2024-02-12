@@ -6,6 +6,7 @@ import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk"
 import { TaskStatuses } from "common/enum/enum"
 import { handleServerAppError } from "common/utils"
 import { tasksApi, TaskType, UpdateTaskType } from "features/TodolistList/Todolist/tasksApi"
+import { thunkTryCatch } from "common/utils/thunk-try-catch"
 
 //types
 
@@ -45,7 +46,8 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, { todolistId: string; ti
   "tasks/addTask",
   async ({ todolistId, title }, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-    try {
+    // использование thunkTryCatch
+    return thunkTryCatch(thunkAPI, async () => {
       dispatch(appActions.setAppStatus({ status: "loading" }))
       dispatch(todolistsActions.changeEntityStatus({ todolistId: todolistId, entityStatus: "loading" }))
       const res = await tasksApi.createTask(todolistId, title)
@@ -58,11 +60,7 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, { todolistId: string; ti
         dispatch(todolistsActions.changeEntityStatus({ todolistId: todolistId, entityStatus: "failed" }))
         return rejectWithValue(null)
       }
-    } catch (e) {
-      dispatch(todolistsActions.changeEntityStatus({ todolistId: todolistId, entityStatus: "failed" }))
-      handleServerNetworkError(e, dispatch)
-      return rejectWithValue(null)
-    }
+    })
   }
 )
 
