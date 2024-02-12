@@ -17,18 +17,21 @@ import { authSelectors } from "features/auth/auth.selectors"
 import { appSelectors } from "app/app.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { authThunks } from "features/auth/auth-reducer"
+import { useActions } from "common/hooks/useActions"
+import { appReducer } from "app/app-reducer"
 
 export const App = () => {
   const status = appSelectors.useStatus()
   const isInitialized = appSelectors.useIsInitialized()
   const isLoggedIn = authSelectors.useIsLoggedIn()
-  const dispatch = useAppDispatch()
+
+  const { me, logOut } = useActions(authThunks)
   const handlerLogOut = () => {
-    dispatch(authThunks.logOut())
+    logOut()
   }
 
   useEffect(() => {
-    dispatch(authThunks.me())
+    me()
   }, [])
 
   {

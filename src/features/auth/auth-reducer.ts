@@ -5,6 +5,7 @@ import { appActions } from "app/app-reducer"
 import { todolistsActions } from "features/TodolistList/todolists-reducer"
 import { authAPI } from "features/auth/authApi"
 import { createAppAsyncThunk, handleServerAppError } from "common/utils"
+import { thunkTryCatch } from "common/utils/thunk-try-catch"
 
 const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginDataType>("auth/login", async (data, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
@@ -46,7 +47,7 @@ const logOut = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/log
 
 const me = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/me", async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
-  try {
+  return thunkTryCatch(thunkAPI, async () => {
     const res = await authAPI.me()
     if (res.data.resultCode === 0) {
       dispatch(appActions.setAppStatus({ status: "succeeded" }))
@@ -54,12 +55,9 @@ const me = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/me", as
     } else {
       return rejectWithValue(null)
     }
-  } catch (e) {
-    handleServerNetworkError(e, dispatch)
-    return rejectWithValue(null)
-  } finally {
+  }).finally(() => {
     dispatch(appActions.setIsInitialized({ isInitialized: true }))
-  }
+  })
 })
 
 const slice = createSlice({
