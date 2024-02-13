@@ -15,10 +15,8 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "features/auth/Login/Login"
 import { authSelectors } from "features/auth/auth.selectors"
 import { appSelectors } from "app/app.selectors"
-import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { authThunks } from "features/auth/auth-reducer"
 import { useActions } from "common/hooks/useActions"
-import { appReducer } from "app/app-reducer"
 
 export const App = () => {
   const status = appSelectors.useStatus()
