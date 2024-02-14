@@ -15,7 +15,7 @@ import { handleServerNetworkError } from "common/utils/handleServerNetworkError"
  * @param thunkAPI - Объект, предоставляющий доступ к функциям `dispatch` и `rejectWithValue`.
  * @param logic - Асинхронная логика, которую нужно выполнить.
  * @returns Promise, который разрешается с результатом выполнения функции `logic`
- *          или отклоняется с значением, возвращенным функцией `thunkAPI.rejectWithValue`.
+ *           или отклоняется с значением, возвращенным функцией `thunkAPI.rejectWithValue`.
  */
 export const thunkTryCatch = async <T>(
   thunkAPI: BaseThunkAPI<AppRootStateType, unknown, AppThunkDispatch, null | BaseResponseType>,

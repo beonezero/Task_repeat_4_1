@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+//app reducer
 
 const initialState = {
   isInitialized: false as boolean,
