@@ -9,9 +9,7 @@ import { thunkTryCatch } from "common/utils/thunk-try-catch"
 
 //types
 
-export type TasksStateType = {
-  [key: string]: TaskType[]
-}
+export type TasksStateType = Record<string, TaskType[]>
 
 export type domainTaskType = {
   title?: string

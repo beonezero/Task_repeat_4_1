@@ -23,6 +23,7 @@ const fetchTodolists = createAppAsyncThunk<
   undefined
 >("todolists/fetchTodolists", async (_, thunkAPI) => {
   const { dispatch } = thunkAPI
+
   return thunkTryCatch(thunkAPI, async () => {
     const res = await todolistsApi.getTodolist()
     dispatch(appActions.setAppStatus({ status: "succeeded" }))

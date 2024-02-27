@@ -7,66 +7,20 @@ import FormGroup from "@mui/material/FormGroup"
 import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
-import { FormikHelpers, useFormik } from "formik"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/auth.selectors"
-import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { authThunks } from "features/auth/auth-reducer"
-import { BaseResponseType } from "common/types"
-
-type FormikErrorType = {
-  email?: string
-  password?: string
-}
+import { useLogin } from "features/auth/lib/useLogin"
 
 export type LoginDataType = {
   email: string
   password: string
   rememberMe: boolean
-}
-
-type FormValues = {
-  email: string
-  password: string
-  rememberMe: boolean
+  captcha?: string
 }
 
 export const Login = () => {
-  const dispatch = useAppDispatch()
-  const isLoggedIn = authSelectors.useIsLoggedIn()
+  const { formik, isLoggedIn } = useLogin()
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
-    validate: (values) => {
-      const errors: FormikErrorType = {}
-      // if (!values.email) {
-      //   errors.email = "Required"
-      // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      //   errors.email = "Invalid email address"
-      // }
-      // if (!values.password) {
-      //   errors.password = "Required"
-      // } else if (values.password.length < 5) {
-      //   errors.password = "Most be more 5 symbols"
-      // }
-      return errors
-    },
-    onSubmit: (values, formikHelpers: FormikHelpers<FormValues>) => {
-      // submit.setSubmiting(true) - дизейблить кнопку ( надо сделать async , await + disabled на кнопку)
-      dispatch(authThunks.login(values))
-        .unwrap()
-        .catch((e: BaseResponseType) => {
-          e.fieldsErrors?.forEach((fieldsError) => {
-            formikHelpers.setFieldError(fieldsError.field, fieldsError.error)
-          })
-        })
-      //formik.resetForm() зачищение формы
-    },
-  })
   if (isLoggedIn) {
     return <Navigate to={"/"} />
   }
