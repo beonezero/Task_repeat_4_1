@@ -4,14 +4,16 @@ import {
   TodolistDomainType,
   todolistsActions,
 } from "features/TodolistList/model/todolists/todolistsSlice"
+import { useAppDispatch } from "common/hooks/useAppDispatch"
 
 type Props = {
   todolist: TodolistDomainType
 }
 
 export const FilterTasksButtons = ({ todolist }: Props) => {
+  const dispatch = useAppDispatch()
   const changeTodolistFilterHandler = (filter: FilterValuesType) => {
-    todolistsActions.changeFilter({ todolistId: todolist.id, filter })
+    dispatch(todolistsActions.changeFilter({ todolistId: todolist.id, filter }))
   }
 
   return (

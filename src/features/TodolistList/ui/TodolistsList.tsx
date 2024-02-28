@@ -8,7 +8,7 @@ import { tasksThunks } from "features/TodolistList/model/tasks/tasksSlice"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/model/auth.selectors"
 import { todolistsSelectors } from "features/TodolistList/model/todolists/todolistsSelectors"
-import { tasksSelectors } from "features/TodolistList/ui/Todolist/Task/tasks.selectors"
+import { tasksSelectors } from "features/TodolistList/ui/Todolist/Tasks/Task/tasks.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 
 export const TodolistsList = () => {

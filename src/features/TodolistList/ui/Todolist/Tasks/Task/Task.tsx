@@ -8,7 +8,7 @@ import { TaskStatuses } from "common/enum/enum"
 import { TaskType } from "features/TodolistList/api/tasks/tasksApi.types"
 import { tasksThunks } from "features/TodolistList/model/tasks/tasksSlice"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import s from "./task.module.css"
+import s from "features/TodolistList/ui/Todolist/Tasks/Task/task.module.css"
 
 type Props = {
   task: TaskType
