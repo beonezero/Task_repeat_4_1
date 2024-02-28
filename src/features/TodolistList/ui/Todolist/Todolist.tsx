@@ -4,11 +4,11 @@ import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import Button from "@mui/material/Button"
 import { Delete } from "@mui/icons-material"
-import { Task } from "./Task/Task"
-import { FilterValuesType } from "features/TodolistList/todolists-reducer"
+import { Task } from "features/TodolistList/ui/Todolist/Task/Task"
+import { FilterValuesType } from "features/TodolistList/model/todolists-reducer"
 import { RequestStatusType } from "app/app-reducer"
 import { TaskStatuses } from "common/enum/enum"
-import { TaskType } from "features/TodolistList/Todolist/tasksApi"
+import { TaskType } from "features/TodolistList/api/tasksApi"
 
 type PropsType = {
   id: string

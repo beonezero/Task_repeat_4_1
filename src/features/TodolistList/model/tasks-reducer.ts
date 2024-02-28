@@ -1,10 +1,10 @@
 import { appActions } from "app/app-reducer"
-import { todolistsActions, todolistsThunks } from "features/TodolistList/todolists-reducer"
+import { todolistsActions, todolistsThunks } from "features/TodolistList/model/todolists-reducer"
 import { createSlice } from "@reduxjs/toolkit"
 import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk"
 import { TaskStatuses } from "common/enum/enum"
 import { handleServerAppError } from "common/utils"
-import { tasksApi, TaskType, UpdateTaskType } from "features/TodolistList/Todolist/tasksApi"
+import { tasksApi, TaskType, UpdateTaskType } from "features/TodolistList/api/tasksApi"
 import { thunkTryCatch } from "common/utils/thunk-try-catch"
 
 //types
