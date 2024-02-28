@@ -2,12 +2,12 @@ import {
   FilterValuesType,
   TodolistDomainType,
   todolistsActions,
-  todolistsReducer,
+  todolistsSlice,
   todolistsThunks,
-} from "features/TodolistList/model/todolists-reducer"
+} from "features/TodolistList/model/todolists/todolistsSlice"
 import { v1 } from "uuid"
 import { RequestStatusType } from "app/app-reducer"
-import { TodolistType } from "features/TodolistList/api/todolists/todolistsApi"
+import { TodolistType } from "features/TodolistList/api/todolists/todolistsApi.types"
 
 let todolistId1: string
 let todolistId2: string
@@ -23,7 +23,7 @@ beforeEach(() => {
 })
 
 test("correct todolist should be removed", () => {
-  const endState = todolistsReducer(
+  const endState = todolistsSlice(
     startState,
     todolistsThunks.removeTodolist.fulfilled({ todolistId: todolistId1 }, "requestId", todolistId1)
   )
@@ -40,7 +40,7 @@ test("correct todolist should be added", () => {
     order: 0,
   }
 
-  const endState = todolistsReducer(
+  const endState = todolistsSlice(
     startState,
     todolistsThunks.addTodolist.fulfilled({ todolist: todolist }, "requestId", todolist.title)
   )
@@ -59,7 +59,7 @@ test("correct todolist should change its name", () => {
     { todolistId: todolistId2, title: newTodolistTitle }
   )
 
-  const endState = todolistsReducer(startState, action)
+  const endState = todolistsSlice(startState, action)
 
   expect(endState[0].title).toBe("What to learn")
   expect(endState[1].title).toBe(newTodolistTitle)
@@ -70,7 +70,7 @@ test("correct filter of todolist should be changed", () => {
 
   const action = todolistsActions.changeFilter({ todolistId: todolistId2, filter: newFilter })
 
-  const endState = todolistsReducer(startState, action)
+  const endState = todolistsSlice(startState, action)
 
   expect(endState[0].filter).toBe("all")
   expect(endState[1].filter).toBe(newFilter)
@@ -78,7 +78,7 @@ test("correct filter of todolist should be changed", () => {
 test("todolists should be added", () => {
   const action = todolistsThunks.fetchTodolists.fulfilled({ todolists: startState }, "requestId", undefined)
 
-  const endState = todolistsReducer([], action)
+  const endState = todolistsSlice([], action)
 
   expect(endState.length).toBe(2)
 })
@@ -87,7 +87,7 @@ test("correct entity status of todolist should be changed", () => {
 
   const action = todolistsActions.changeEntityStatus({ todolistId: todolistId2, entityStatus: newStatus })
 
-  const endState = todolistsReducer(startState, action)
+  const endState = todolistsSlice(startState, action)
 
   expect(endState[0].entityStatus).toBe("idle")
   expect(endState[1].entityStatus).toBe(newStatus)

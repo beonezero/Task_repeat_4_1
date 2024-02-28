@@ -1,5 +1,5 @@
-import { tasksReducer } from "features/TodolistList/model/tasks-reducer"
-import { todolistsReducer } from "features/TodolistList/model/todolists-reducer"
+import { tasksReducer } from "features/TodolistList/model/tasks/tasksSlice"
+import { todolistsSlice } from "features/TodolistList/model/todolists/todolistsSlice"
 import { AnyAction, combineReducers } from "redux"
 import { ThunkAction, ThunkDispatch } from "redux-thunk"
 import { TypedUseSelectorHook, useSelector } from "react-redux"
@@ -14,7 +14,7 @@ export const store = configureStore({
   reducer: {
     app: appReducer,
     tasks: tasksReducer,
-    todolists: todolistsReducer,
+    todolists: todolistsSlice,
     auth: authReducer,
   },
 })

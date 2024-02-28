@@ -3,11 +3,15 @@ import Grid from "@mui/material/Grid"
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm"
 import Paper from "@mui/material/Paper"
 import { Todolist } from "features/TodolistList/ui/Todolist/Todolist"
-import { FilterValuesType, todolistsActions, todolistsThunks } from "features/TodolistList/model/todolists-reducer"
-import { tasksThunks } from "features/TodolistList/model/tasks-reducer"
+import {
+  FilterValuesType,
+  todolistsActions,
+  todolistsThunks,
+} from "features/TodolistList/model/todolists/todolistsSlice"
+import { tasksThunks } from "features/TodolistList/model/tasks/tasksSlice"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/model/auth.selectors"
-import { todolistsSelectors } from "features/TodolistList/model/todolists-selectors"
+import { todolistsSelectors } from "features/TodolistList/model/todolists/todolistsSelectors"
 import { tasksSelectors } from "features/TodolistList/ui/Todolist/tasks.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { TaskStatuses } from "common/enum/enum"
