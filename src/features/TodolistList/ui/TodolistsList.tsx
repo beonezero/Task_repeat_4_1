@@ -12,9 +12,8 @@ import { tasksThunks } from "features/TodolistList/model/tasks/tasksSlice"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/model/auth.selectors"
 import { todolistsSelectors } from "features/TodolistList/model/todolists/todolistsSelectors"
-import { tasksSelectors } from "features/TodolistList/ui/Todolist/tasks.selectors"
+import { tasksSelectors } from "features/TodolistList/ui/Todolist/Task/tasks.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
-import { TaskStatuses } from "common/enum/enum"
 
 export const TodolistsList = () => {
   const todolists = todolistsSelectors.useTodolists()
@@ -24,20 +23,6 @@ export const TodolistsList = () => {
 
   const addTask = useCallback(function (title: string, todolistId: string) {
     dispatch(tasksThunks.addTask({ todolistId: todolistId, title: title }))
-  }, [])
-
-  const changeStatus = useCallback(function (id: string, isDone: boolean, todolistId: string) {
-    dispatch(
-      tasksThunks.updateTask({
-        todolistId: todolistId,
-        taskId: id,
-        model: { status: isDone ? TaskStatuses.Completed : TaskStatuses.New },
-      })
-    )
-  }, [])
-
-  const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-    dispatch(tasksThunks.updateTask({ todolistId: todolistId, taskId: id, model: { title: newTitle } }))
   }, [])
 
   const changeFilter = useCallback(function (filter: FilterValuesType, todolistId: string) {
@@ -93,10 +78,8 @@ export const TodolistsList = () => {
                   tasks={allTodolistTasks}
                   changeFilter={changeFilter}
                   addTask={addTask}
-                  changeTaskStatus={changeStatus}
                   filter={tl.filter}
                   removeTodolist={removeTodolist}
-                  changeTaskTitle={changeTaskTitle}
                   changeTodolistTitle={changeTodolistTitle}
                 />
               </Paper>
