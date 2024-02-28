@@ -21,10 +21,6 @@ export const TodolistsList = () => {
   const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
 
-  const addTask = useCallback(function (title: string, todolistId: string) {
-    dispatch(tasksThunks.addTask({ todolistId: todolistId, title: title }))
-  }, [])
-
   const changeFilter = useCallback(function (filter: FilterValuesType, todolistId: string) {
     dispatch(todolistsActions.changeFilter({ todolistId: todolistId, filter: filter }))
   }, [])
@@ -77,7 +73,6 @@ export const TodolistsList = () => {
                   title={tl.title}
                   tasks={allTodolistTasks}
                   changeFilter={changeFilter}
-                  addTask={addTask}
                   filter={tl.filter}
                   removeTodolist={removeTodolist}
                   changeTodolistTitle={changeTodolistTitle}

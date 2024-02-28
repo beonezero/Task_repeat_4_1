@@ -8,6 +8,7 @@ import { TaskStatuses } from "common/enum/enum"
 import { TaskType } from "features/TodolistList/api/tasks/tasksApi.types"
 import { tasksThunks } from "features/TodolistList/model/tasks/tasksSlice"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
+import s from "./task.module.css"
 
 type Props = {
   task: TaskType
@@ -17,13 +18,13 @@ type Props = {
 export const Task = React.memo(({ task, todolistId, entityStatus }: Props) => {
   const dispatch = useAppDispatch()
   const removeTaskHandler = () => {
-    dispatch(tasksThunks.removeTask({ todolistId: todolistId, taskId: task.id }))
+    dispatch(tasksThunks.removeTask({ todolistId, taskId: task.id }))
   }
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     let status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
     dispatch(
       tasksThunks.updateTask({
-        todolistId: todolistId,
+        todolistId,
         taskId: task.id,
         model: { status },
       })
@@ -33,7 +34,7 @@ export const Task = React.memo(({ task, todolistId, entityStatus }: Props) => {
   const changeTaskTitleHandler = (title: string) => {
     dispatch(
       tasksThunks.updateTask({
-        todolistId: todolistId,
+        todolistId,
         taskId: task.id,
         model: { title },
       })
@@ -41,7 +42,7 @@ export const Task = React.memo(({ task, todolistId, entityStatus }: Props) => {
   }
 
   return (
-    <div key={task.id}>
+    <div key={task.id} className={task.status === TaskStatuses.Completed ? s.isDone : ""}>
       <Checkbox
         checked={task.status === TaskStatuses.Completed}
         color="primary"
