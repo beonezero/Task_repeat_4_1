@@ -22,10 +22,6 @@ export const TodolistsList = () => {
   const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
 
-  const removeTask = useCallback(function (taskId: string, todolistId: string) {
-    dispatch(tasksThunks.removeTask({ todolistId: todolistId, taskId: taskId }))
-  }, [])
-
   const addTask = useCallback(function (title: string, todolistId: string) {
     dispatch(tasksThunks.addTask({ todolistId: todolistId, title: title }))
   }, [])
@@ -95,7 +91,6 @@ export const TodolistsList = () => {
                   entityStatus={tl.entityStatus}
                   title={tl.title}
                   tasks={allTodolistTasks}
-                  removeTask={removeTask}
                   changeFilter={changeFilter}
                   addTask={addTask}
                   changeTaskStatus={changeStatus}
