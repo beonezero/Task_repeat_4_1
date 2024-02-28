@@ -3,11 +3,7 @@ import Grid from "@mui/material/Grid"
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm"
 import Paper from "@mui/material/Paper"
 import { Todolist } from "features/TodolistList/ui/Todolist/Todolist"
-import {
-  FilterValuesType,
-  todolistsActions,
-  todolistsThunks,
-} from "features/TodolistList/model/todolists/todolistsSlice"
+import { todolistsThunks } from "features/TodolistList/model/todolists/todolistsSlice"
 import { tasksThunks } from "features/TodolistList/model/tasks/tasksSlice"
 import { Navigate } from "react-router-dom"
 import { authSelectors } from "features/auth/model/auth.selectors"
@@ -21,19 +17,7 @@ export const TodolistsList = () => {
   const isLoggedIn = authSelectors.useIsLoggedIn()
   const dispatch = useAppDispatch()
 
-  const changeFilter = useCallback(function (filter: FilterValuesType, todolistId: string) {
-    dispatch(todolistsActions.changeFilter({ todolistId: todolistId, filter: filter }))
-  }, [])
-
-  const removeTodolist = useCallback(function (todolistId: string) {
-    dispatch(todolistsThunks.removeTodolist(todolistId))
-  }, [])
-
-  const changeTodolistTitle = useCallback(function (todolistId: string, title: string) {
-    dispatch(todolistsThunks.updateTodolist({ todolistId, title }))
-  }, [])
-
-  const addTodolist = useCallback(
+  const addTodolistCallback = useCallback(
     (title: string) => {
       dispatch(todolistsThunks.addTodolist(title))
     },
@@ -58,7 +42,7 @@ export const TodolistsList = () => {
   return (
     <>
       <Grid container style={{ padding: "20px" }}>
-        <AddItemForm addItem={addTodolist} />
+        <AddItemForm addItem={addTodolistCallback} />
       </Grid>
       <Grid container spacing={3}>
         {todolists.map((tl) => {
@@ -68,14 +52,11 @@ export const TodolistsList = () => {
             <Grid item key={tl.id}>
               <Paper style={{ padding: "10px" }}>
                 <Todolist
-                  id={tl.id}
+                  todolistId={tl.id}
                   entityStatus={tl.entityStatus}
                   title={tl.title}
                   tasks={allTodolistTasks}
-                  changeFilter={changeFilter}
                   filter={tl.filter}
-                  removeTodolist={removeTodolist}
-                  changeTodolistTitle={changeTodolistTitle}
                 />
               </Paper>
             </Grid>
