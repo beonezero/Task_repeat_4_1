@@ -2,11 +2,11 @@ import React, { useCallback } from "react"
 import { AddItemForm } from "common/components/AddItemForm/AddItemForm"
 import { EditableSpan } from "common/components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
-import Button from "@mui/material/Button"
 import { Delete } from "@mui/icons-material"
 import { Task } from "features/TodolistList/ui/Todolist/Task/Task"
 import {
   FilterValuesType,
+  TodolistDomainType,
   todolistsActions,
   todolistsThunks,
 } from "features/TodolistList/model/todolists/todolistsSlice"
@@ -15,8 +15,10 @@ import { TaskStatuses } from "common/enum/enum"
 import { TaskType } from "features/TodolistList/api/tasks/tasksApi.types"
 import { tasksThunks } from "features/TodolistList/model/tasks/tasksSlice"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
+import { FilterTasksButtons } from "features/TodolistList/ui/Todolist/FilterTasksButtons/FilterTasksButtons"
 
 type Type = {
+  todolist: TodolistDomainType
   todolistId: string
   title: string
   tasks: TaskType[]
@@ -24,7 +26,7 @@ type Type = {
   entityStatus: RequestStatusType
 }
 
-export const Todolist = React.memo(({ filter, title, todolistId, entityStatus, tasks }: Type) => {
+export const Todolist = React.memo(({ todolist, filter, title, todolistId, entityStatus, tasks }: Type) => {
   const dispatch = useAppDispatch()
 
   const addTaskCallback = useCallback(
@@ -34,10 +36,6 @@ export const Todolist = React.memo(({ filter, title, todolistId, entityStatus, t
     [todolistId]
   )
 
-  const changeFilterHandler = useCallback(function (filter: FilterValuesType) {
-    dispatch(todolistsActions.changeFilter({ todolistId, filter: filter }))
-  }, [])
-
   const removeTodolistHandler = useCallback(function () {
     dispatch(todolistsThunks.removeTodolist(todolistId))
   }, [])
@@ -45,10 +43,6 @@ export const Todolist = React.memo(({ filter, title, todolistId, entityStatus, t
   const changeTodolistTitleCallback = useCallback(function (title: string) {
     dispatch(todolistsThunks.updateTodolist({ todolistId, title }))
   }, [])
-
-  const onAllClickHandler = useCallback(() => changeFilterHandler("all"), [changeFilterHandler])
-  const onActiveClickHandler = useCallback(() => changeFilterHandler("active"), [changeFilterHandler])
-  const onCompletedClickHandler = useCallback(() => changeFilterHandler("completed"), [changeFilterHandler])
 
   let tasksForTodolist = tasks
 
@@ -74,19 +68,7 @@ export const Todolist = React.memo(({ filter, title, todolistId, entityStatus, t
         ))}
       </div>
       <div style={{ paddingTop: "10px" }}>
-        <Button variant={filter === "all" ? "outlined" : "text"} onClick={onAllClickHandler} color={"inherit"}>
-          All
-        </Button>
-        <Button variant={filter === "active" ? "outlined" : "text"} onClick={onActiveClickHandler} color={"primary"}>
-          Active
-        </Button>
-        <Button
-          variant={filter === "completed" ? "outlined" : "text"}
-          onClick={onCompletedClickHandler}
-          color={"secondary"}
-        >
-          Completed
-        </Button>
+        <FilterTasksButtons todolist={todolist} />
       </div>
     </div>
   )
