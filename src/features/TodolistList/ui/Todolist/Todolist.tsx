@@ -8,7 +8,7 @@ import { Task } from "features/TodolistList/ui/Todolist/Task/Task"
 import { FilterValuesType } from "features/TodolistList/model/todolists-reducer"
 import { RequestStatusType } from "app/app-reducer"
 import { TaskStatuses } from "common/enum/enum"
-import { TaskType } from "features/TodolistList/api/tasksApi"
+import { TaskType } from "features/TodolistList/api/tasks/tasksApi"
 
 type PropsType = {
   id: string

@@ -1,7 +1,7 @@
 import { instance } from "common/api"
 import { AxiosResponse } from "axios"
 import { BaseResponseType } from "common/types"
-import { TaskPriorities, TaskStatuses } from "common/enum/enum"
+import { ResponseTaskType, TaskType, UpdateTaskType } from "features/TodolistList/api/tasks/tasksApi.types"
 
 export const tasksApi = {
   getTasks(todolistId: string) {
@@ -30,36 +30,4 @@ export const tasksApi = {
       UpdateTaskType
     >(`todo-lists/${todolistId}/tasks/${taskId}`, model)
   },
-}
-
-//types
-
-export type UpdateTaskType = {
-  title: string
-  description: string
-  completed: boolean
-  status: TaskStatuses
-  priority: TaskPriorities
-  startDate: string
-  deadline: string
-}
-
-export type TaskType = {
-  description: string
-  title: string
-  completed: boolean
-  status: TaskStatuses
-  priority: TaskPriorities
-  startDate: string
-  deadline: string
-  id: string
-  todoListId: string
-  order: number
-  addedDate: string
-}
-
-type ResponseTaskType = {
-  items: TaskType[]
-  totalCount: number
-  error: string
 }

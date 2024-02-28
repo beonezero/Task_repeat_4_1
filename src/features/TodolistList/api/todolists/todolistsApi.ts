@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios"
 import { BaseResponseType } from "common/types"
 import { instance } from "common/api"
+import { TodolistType } from "features/TodolistList/api/todolists/todolistsApi.types"
 
 export const todolistsApi = {
   getTodolist() {
@@ -21,13 +22,4 @@ export const todolistsApi = {
   updateTodolist(todolistId: string, title: string) {
     return instance.put<null, AxiosResponse<BaseResponseType>, { title: string }>(`todo-lists/${todolistId}`, { title })
   },
-}
-
-//types
-
-export type TodolistType = {
-  id: string
-  title: string
-  addedDate: string
-  order: number
 }

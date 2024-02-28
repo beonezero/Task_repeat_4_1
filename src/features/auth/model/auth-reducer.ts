@@ -1,10 +1,10 @@
-import { LoginDataType } from "features/auth/ui/Login/Login"
 import { createSlice } from "@reduxjs/toolkit"
 import { appActions } from "app/app-reducer"
 import { todolistsActions } from "features/TodolistList/model/todolists-reducer"
 import { authAPI } from "features/auth/api/authApi"
 import { createAppAsyncThunk, handleServerAppError } from "common/utils"
 import { thunkTryCatch } from "common/utils/thunk-try-catch"
+import { LoginDataType } from "features/auth/api/auth.type"
 
 const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginDataType>("auth/login", async (data, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
