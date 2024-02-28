@@ -8,15 +8,7 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { Navigate } from "react-router-dom"
-import { authSelectors } from "features/auth/auth.selectors"
 import { useLogin } from "features/auth/lib/useLogin"
-
-export type LoginDataType = {
-  email: string
-  password: string
-  rememberMe: boolean
-  captcha?: string
-}
 
 export const Login = () => {
   const { formik, isLoggedIn } = useLogin()
