@@ -27,7 +27,11 @@ const slice = createSlice({
         state.status = "loading"
       })
       .addMatcher(isRejected, (state, action: AnyAction) => {
-        state.error = action.error.message
+        if (action.payload) {
+          state.error = action.payload.messages[0]
+        } else {
+          state.error = action.error.message ? action.error.message : "Some error occurred"
+        }
         state.status = "failed"
       })
       .addMatcher(isFulfilled, (state) => {
