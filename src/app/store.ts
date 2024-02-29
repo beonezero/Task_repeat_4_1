@@ -3,8 +3,8 @@ import { todolistsSlice } from "features/TodolistList/model/todolists/todolistsS
 import { AnyAction, combineReducers } from "redux"
 import { ThunkAction, ThunkDispatch } from "redux-thunk"
 import { TypedUseSelectorHook, useSelector } from "react-redux"
-import { appReducer } from "./app-reducer"
-import { authReducer } from "features/auth/model/auth-reducer"
+import { appSlice } from "app/appSlice"
+import { authSlice } from "features/auth/model/authSlice"
 import { configureStore } from "@reduxjs/toolkit"
 
 // объединяя reducer-ы с помощью combineReducers,
@@ -12,10 +12,10 @@ import { configureStore } from "@reduxjs/toolkit"
 // непосредственно создаём store
 export const store = configureStore({
   reducer: {
-    app: appReducer,
+    app: appSlice,
     tasks: tasksReducer,
     todolists: todolistsSlice,
-    auth: authReducer,
+    auth: authSlice,
   },
 })
 // определить автоматически тип всего объекта состояния

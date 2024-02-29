@@ -1,4 +1,4 @@
-import { appActions } from "app/app-reducer"
+import { appActions } from "app/appSlice"
 import { AppThunkDispatch } from "app/store"
 import axios from "axios"
 

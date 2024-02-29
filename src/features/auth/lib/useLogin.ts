@@ -1,5 +1,5 @@
 import { FormikHelpers, useFormik } from "formik"
-import { authThunks } from "features/auth/model/auth-reducer"
+import { authThunks } from "features/auth/model/authSlice"
 import { BaseResponseType } from "common/types"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 import { authSelectors } from "features/auth/model/auth.selectors"

@@ -19,7 +19,7 @@ export const TodolistsList = () => {
 
   const addTodolistCallback = useCallback(
     (title: string) => {
-      dispatch(todolistsThunks.addTodolist(title))
+      return dispatch(todolistsThunks.addTodolist(title)).unwrap()
     },
     [dispatch]
   )

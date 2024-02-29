@@ -1,7 +1,7 @@
 import { toast, ToastContainer } from "react-toastify"
 import { useEffect } from "react"
 import "react-toastify/dist/ReactToastify.css"
-import { appActions } from "app/app-reducer"
+import { appActions } from "app/appSlice"
 import { appSelectors } from "app/app.selectors"
 import { useAppDispatch } from "common/hooks/useAppDispatch"
 

@@ -1,4 +1,4 @@
-import { appActions } from "app/app-reducer"
+import { appActions } from "app/appSlice"
 import { todolistsActions, todolistsThunks } from "features/TodolistList/model/todolists/todolistsSlice"
 import { createSlice } from "@reduxjs/toolkit"
 import { createAppAsyncThunk } from "common/utils/createAppAsyncThunk"
@@ -42,7 +42,6 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, { todolistId: string; ti
     const { dispatch, rejectWithValue } = thunkAPI
     // использование thunkTryCatch
     return thunkTryCatch(thunkAPI, async () => {
-      dispatch(appActions.setAppStatus({ status: "loading" }))
       dispatch(todolistsActions.changeEntityStatus({ todolistId: todolistId, entityStatus: "loading" }))
       const res = await tasksApi.createTask(todolistId, title)
       if (res.data.resultCode === 0) {
@@ -50,9 +49,9 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, { todolistId: string; ti
         dispatch(todolistsActions.changeEntityStatus({ todolistId: todolistId, entityStatus: "succeeded" }))
         return { task: res.data.data.item }
       } else {
-        handleServerAppError<{ item: TaskType }>(res.data, dispatch)
+        handleServerAppError<{ item: TaskType }>(res.data, dispatch, false)
         dispatch(todolistsActions.changeEntityStatus({ todolistId: todolistId, entityStatus: "failed" }))
-        return rejectWithValue(null)
+        return rejectWithValue(res.data)
       }
     })
   }

@@ -18,7 +18,7 @@ export const Todolist = React.memo(({ todolist, tasks }: Type) => {
 
   const addTaskCallback = useCallback(
     (title: string) => {
-      dispatch(tasksThunks.addTask({ todolistId: todolist.id, title: title }))
+      return dispatch(tasksThunks.addTask({ todolistId: todolist.id, title: title })).unwrap()
     },
     [todolist.id]
   )

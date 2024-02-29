@@ -10,18 +10,19 @@ type Props = {
 }
 
 export const TodolistTitle = ({ todolist }: Props) => {
+  const { id, entityStatus, title } = todolist
   const dispatch = useAppDispatch()
   const removeTodolistHandler = useCallback(function () {
-    dispatch(todolistsThunks.removeTodolist(todolist.id))
+    dispatch(todolistsThunks.removeTodolist(id))
   }, [])
 
   const changeTodolistTitleCallback = useCallback(function (title: string) {
-    dispatch(todolistsThunks.updateTodolist({ todolistId: todolist.id, title }))
+    dispatch(todolistsThunks.updateTodolist({ todolistId: id, title }))
   }, [])
   return (
     <h3>
-      <EditableSpan value={todolist.title} onChange={changeTodolistTitleCallback} />
-      <IconButton onClick={removeTodolistHandler} disabled={todolist.entityStatus === "loading"}>
+      <EditableSpan value={title} onChange={changeTodolistTitleCallback} />
+      <IconButton onClick={removeTodolistHandler} disabled={entityStatus === "loading"}>
         <Delete />
       </IconButton>
     </h3>

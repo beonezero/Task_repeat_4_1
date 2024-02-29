@@ -1,4 +1,4 @@
-import { appActions, RequestStatusType } from "app/app-reducer"
+import { appActions, RequestStatusType } from "app/appSlice"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { todolistsApi } from "features/TodolistList/api/todolists/todolistsApi"
 import { createAppAsyncThunk, handleServerAppError } from "common/utils"
@@ -24,28 +24,23 @@ const fetchTodolists = createAppAsyncThunk<
   undefined
 >("todolists/fetchTodolists", async (_, thunkAPI) => {
   const { dispatch } = thunkAPI
-
-  return thunkTryCatch(thunkAPI, async () => {
-    const res = await todolistsApi.getTodolist()
-    dispatch(appActions.setAppStatus({ status: "succeeded" }))
-    return { todolists: res.data }
-  })
+  const res = await todolistsApi.getTodolist()
+  dispatch(appActions.setAppStatus({ status: "succeeded" }))
+  return { todolists: res.data }
 })
 
 const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, string>(
   "todolists/addTodolist",
   async (title, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-    return thunkTryCatch(thunkAPI, async () => {
-      const res = await todolistsApi.createTodolist(title)
-      if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
-        dispatch(appActions.setAppStatus({ status: "succeeded" }))
-        return { todolist: res.data.data.item }
-      } else {
-        handleServerAppError(res.data, dispatch)
-        return rejectWithValue(null)
-      }
-    })
+    const res = await todolistsApi.createTodolist(title)
+    if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+      dispatch(appActions.setAppStatus({ status: "succeeded" }))
+      return { todolist: res.data.data.item }
+    } else {
+      handleServerAppError(res.data, dispatch, false)
+      return rejectWithValue(res.data)
+    }
   }
 )
 

@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { appActions } from "app/app-reducer"
+import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit"
+import { appActions } from "app/appSlice"
 import { todolistsActions } from "features/TodolistList/model/todolists/todolistsSlice"
 import { authAPI } from "features/auth/api/authApi"
 import { createAppAsyncThunk, handleServerAppError } from "common/utils"
@@ -57,17 +57,23 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(me.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn
-      })
-      .addCase(logOut.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn
-      })
+      // .addCase(me.fulfilled, (state, action) => {
+      //   state.isLoggedIn = action.payload.isLoggedIn
+      // })
+      // .addCase(logOut.fulfilled, (state, action) => {
+      //   state.isLoggedIn = action.payload.isLoggedIn
+      // })
+      // .addCase(login.fulfilled, (state, action) => {
+      //   state.isLoggedIn = action.payload.isLoggedIn
+      // })
+      .addMatcher(
+        isAnyOf(authThunks.login.fulfilled, authThunks.logOut.fulfilled, authThunks.me.fulfilled),
+        (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
+          state.isLoggedIn = action.payload.isLoggedIn
+        }
+      )
   },
 })
 
-export const authReducer = slice.reducer
+export const authSlice = slice.reducer
 export const authThunks = { login, logOut, me }

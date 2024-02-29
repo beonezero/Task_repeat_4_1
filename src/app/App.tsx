@@ -15,7 +15,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "features/auth/ui/Login/Login"
 import { authSelectors } from "features/auth/model/auth.selectors"
 import { appSelectors } from "app/app.selectors"
-import { authThunks } from "features/auth/model/auth-reducer"
+import { authThunks } from "features/auth/model/authSlice"
 import { useActions } from "common/hooks/useActions"
 
 export const App = () => {
