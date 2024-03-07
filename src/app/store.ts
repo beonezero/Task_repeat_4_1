@@ -1,15 +1,12 @@
 import { tasksReducer } from "features/TodolistList/model/tasks/tasksSlice"
 import { todolistsSlice } from "features/TodolistList/model/todolists/todolistsSlice"
-import { AnyAction, combineReducers } from "redux"
-import { ThunkAction, ThunkDispatch } from "redux-thunk"
+import { AnyAction } from "redux"
+import { ThunkDispatch } from "redux-thunk"
 import { TypedUseSelectorHook, useSelector } from "react-redux"
 import { appSlice } from "app/appSlice"
 import { authSlice } from "features/auth/model/authSlice"
 import { configureStore } from "@reduxjs/toolkit"
 
-// объединяя reducer-ы с помощью combineReducers,
-// мы задаём структуру нашего единственного объекта-состояния
-// непосредственно создаём store
 export const store = configureStore({
   reducer: {
     app: appSlice,
