@@ -6,6 +6,7 @@ const initialState = {
   status: "idle" as RequestStatusType,
   error: null as null | string,
 }
+//reducer
 
 const slice = createSlice({
   name: "app",
